@@ -1,0 +1,59 @@
+B 3 C o m p i l a t i o n
+B 188 Equation Listing    SOLVE Opti Using NLP From line 183
+D 191 Ant
+D 202 taue
+D 213 Gexe
+D 224 Gam
+D 235 Eq
+D 246 Res1
+D 257 Res2
+D 268 Res3
+D 275 Res4
+D 282 Res5
+D 289 Res6
+D 296 Obje
+B 302 Column Listing      SOLVE Opti Using NLP From line 183
+E 305 P
+E 327 T
+E 361 Ps
+E 380 x
+E 408 y
+E 430 alpha
+E 486 Gex
+E 508 gama
+E 527 tau
+E 552 a
+E 602 b
+E 652 Obj
+B 660 Range Statistics    SOLVE Opti Using NLP From line 183
+B 671 Model Statistics    SOLVE Opti Using NLP From line 183
+B 685 Solution Report     SOLVE Opti Using NLP From line 183
+F 740 Ant
+F 769 taue
+F 822 Gexe
+F 875 Gam
+F 904 Eq
+F 933 Res1
+F 950 Res2
+F 967 Res3
+F 974 Res4
+F 981 Res5
+F 988 Res6
+F 997 Obje
+G 1001 P
+G 1018 T
+G 1035 Ps
+G 1064 x
+G 1093 y
+G 1122 alpha
+G 1131 Gex
+G 1184 gama
+G 1213 tau
+G 1266 a
+G 1275 b
+G 1286 Obj
+B 1297 E x e c u t i o n
+I 1297 a
+I 1306 b
+I 1314 alpha
+I 1323 Obj

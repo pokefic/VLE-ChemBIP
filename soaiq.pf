@@ -1,0 +1,10 @@
+comp= "WA"
+curdir="D:/Documentos/GAMS"
+lo=3
+execMode=0
+IDCGDXOutput="_miro_gdxout_.gdx"
+idir1="D:\Documentos\GAMS"
+IDCGDXInput="_miro_gdxin_.gdx"
+LstTitleLeftAligned=1
+trace="_scenTrc.trc"
+traceopt=3

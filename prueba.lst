@@ -1,0 +1,40 @@
+GAMS 44.4.0  06604687 Sep 19, 2023          WEX-WEI x86 64bit/MS Windows - 10/03/23 03:58:27 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  set i / i1*i10 /;
+   2  parameter
+   3      f(i) / i1 1 /
+   4      g(i) / i1 1 /
+   5      NC /2/;
+   6  loop(i$(ord(i)>=NC),
+   7    f(i) = f(i-2) + f(i-1);
+   8  );
+   9  display f;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.4.0 06604687 WEX-WEI
+GAMS 44.4.0  06604687 Sep 19, 2023          WEX-WEI x86 64bit/MS Windows - 10/03/23 03:58:27 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----      9 PARAMETER f  
+
+i1   1.000,    i2   1.000,    i3   2.000,    i4   3.000,    i5   5.000,    i6   8.000,    i7  13.000,    i8  21.000,    i9  34.000,    i10 55.000
+
+
+
+EXECUTION TIME       =        0.000 SECONDS      4 MB  44.4.0 06604687 WEX-WEI
+
+
+USER: GAMS Community License for Jose Paredes Ortiz  G230518|0002AO-GEN
+      University of Engineering and Technology - UTEC,           CL2753
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      D:\Documentos\GAMS\prueba.gms
+Output     D:\Documentos\GAMS\prueba.lst

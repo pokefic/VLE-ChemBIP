@@ -1,0 +1,51 @@
+# ChemE BIP
+
+ChemE BIP, short for "Chemical Engineering Binary Interaction Parameters," is a versatile and powerful tool designed to estimate binary interaction parameters essential for Vapor Liquid Equilibrium (VLE) calculations in complex multicomponent systems. This model relies primarily on activity coefficients derived from the Non-Random Two-Liquid (NRTL) model, enabling accurate predictions of phase equilibria. Whether you are a chemical engineer, researcher, or student, ChemE BIP offers valuable assistance in understanding and effectively using this tool for your VLE calculations.
+
+## Equation of Equilibrium Activity Coefficient
+
+ChemE BIP is based on the equilibrium activity coefficient equation:
+
+
+$$\large y_iP = \gamma_i x_iP^{\text{sat}}_i$$
+
+- $y_i$ represents the vapor-phase mole fraction of the component of interest.
+- $P$ is the total system pressure.
+- $\gamma_i$ denotes the activity coefficient of the component in the liquid phase.
+- $x_i$ signifies the liquid-phase mole fraction of the component.
+- $P^{\text{sat}}_i$ represents the saturation pressure of the component.
+
+This equation is fundamental in the calculation of vapor-liquid equilibrium (VLE) in multicomponent systems and is used to estimate binary interaction parameters in ChemE BIP.
+
+The activity coefficient is calculated by NRTL model:
+
+
+$$\ln\left(\gamma_i\right) = \frac{\sum_{j=1}^{c} x_{j}\tau_{ji}G_{ji}}{\sum_{k=1}^{c} x_{k}G_{ki}} + \sum_{j=1}^{c} \left[{\frac{x_{j}G_{ij}}{\sum_{k=1}^{c} x_{k}G_{kj}}\left(\tau_{ij}-\frac{\sum_{k=1}^{c} x_{k}\tau_{kj}G_{kj}}{\sum_{k=1}^{c} x_{k}G_{kj}}\right)} \right]$$
+
+$$G_{ij} = \exp\left(-\alpha_{ij}\tau_{ij}\right)$$
+
+$$\tau_{i,j} = A_{ij} + \frac{B_{ij}}{T}$$
+
+## Optimization Model
+
+The optimization model is based on minimizing the squared difference between the experimental variables and the variables obtained through the activity coefficient model. In this approach, the goal is to find the optimal values for the model's variables that minimize this squared discrepancy. This involves adjusting the parameters of the activity coefficient model in a way that optimally fits the model's predictions to the available experimental data. In summary, the primary objective is to find a parameter configuration that makes the model fit as closely as possible to the experimental results, typically achieved by minimizing the sum of the squares of the differences between the model's predictions and the actual experimental values.
+
+$$ \min \sum_{k=1}^{n}\sum_{i=1}^{c} (x_{i}-x_{i_{exp}})^2+\sum_{k=1}^{n}\sum_{i=1}^{c} (y_{i}-y_{i_{exp}})^2+\sum_{k=1}^{n} (T-T_{exp})^2+\sum_{k=1}^{n} (P-P_{exp})^2$$
+
+References:
+
+J.D. Seader, E.J. Henley, and D.K. Roper, "Separation Process Principles," 4th ed. Wiley, 2015.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

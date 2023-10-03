@@ -1,0 +1,159 @@
+{
+  "theme": "browser",
+  "customCss": true,
+  "layoutSettings": {
+    "maxTabsExpandedInput": 5,
+    "maxTabsExpandedOutput": 5,
+    "maxTabsExpandedPivotComp": 5,
+    "maxTabsExpandedSplitComp": 5,
+    "maxTabsExpandedTabComp": 5
+  },
+  "excelIncludeMeta": true,
+  "excelIncludeEmptySheets": true,
+  "defaultRendererOutput": "datatable",
+  "autoGenInputGraphs": true,
+  "storeLogFilesDuration": 7,
+  "defCompMode": "tab",
+  "pivotCompSettings": {
+    "hidePivotControls": true,
+    "fixedColumns": true
+  },
+  "activateModules": {
+    "loadLocal": true,
+    "logFile": true,
+    "lstFile": true,
+    "attachments": true,
+    "hcube": false,
+    "downloadTempFiles": true
+  },
+  "aggregateWidgets": false,
+  "overwriteSheetOrder": {
+    "input": ["xpx", "_widgets", "xpy", "pt", "psat", "i"]
+  },
+  "overwriteAliases": {
+    "i": {
+      "newAlias": "Compounds"
+    },
+    "xpx": {
+      "newAlias": "Liquid molar fraction"
+    },
+    "xpy": {
+      "newAlias": "Vapor molar fraction"
+    },
+    "pt": {
+      "newAlias": "Operation Conditions"
+    },
+    "psat": {
+      "newAlias": "Parameters of Antoine Equation for compounds"
+    },
+    "a": {
+      "newAlias": "Binary interaction Parameter a"
+    },
+    "b": {
+      "newAlias": "Binary interaction Parameter b"
+    },
+    "_scalarsve_out": {
+      "newAlias": "Minimization error"
+    },
+    "alpha": {
+      "newAlias": "Binary interaction alpha"
+    }
+  },
+  "roundingDecimals": 4,
+  "pageTitle": "Chem BIP",
+  "UILogo": "Final-1.png",
+  "readme": {
+    "tabTitle": "Chem BIP",
+    "filename": "Introduction to ChemBIP",
+    "enableMath": true
+  },
+  "defaultScenName": "Ethanol - Water",
+  "overwriteHeaderAliases": {
+    "i": {
+      "newHeaders": ["Compound Abreviation", "Compound Name"]
+    },
+    "xpx": {
+      "newHeaders": ["Number of experimental points", "Compound Abreviation", "Value"]
+    },
+    "xpy": {
+      "newHeaders": ["Number of experimental points", "Compound Abreviation", "Value"]
+    },
+    "_scalarsve_out": {
+      "newHeaders": ["Objective Function", "Scalar Description", "Result", "Marginal", "Lower", "Upper", "Scale"]
+    }
+  },
+  "inputWidgets": {
+    "_gmsopt_comp": {
+      "widgetType": "dropdown",
+      "noHcube": false,
+      "clearValue": false,
+      "multiple": false,
+      "choices": "$i$uni",
+      "label": "Select a component:"
+    },
+    "_gmsopt_prueba1": {
+      "widgetType": "dropdown",
+      "noHcube": false,
+      "clearValue": false,
+      "multiple": false,
+      "label": "",
+      "choices": "$xpx$k"
+    },
+    "xpx": {
+      "widgetType": "table",
+      "tableType": "default",
+      "readonly": false,
+      "readonlyCols": "k",
+      "colWidths": 100,
+      "hideIndexCol": true,
+      "heatmap": false,
+      "colFormat": {
+        "value": {
+          "format": "0,0.0000"
+        }
+      }
+    }
+  },
+  "symbolLinks": [
+    {
+      "source": "alpha",
+      "target": "i"
+    }
+  ],
+  "handsontable": {
+    "stretchH": "none",
+    "readonly": false,
+    "contextMenu": {
+      "enabled": true,
+      "allowRowEdit": true,
+      "allowColEdit": true
+    },
+    "height": 5000,
+    "colWidths": 100
+  },
+  "inputGroups": [
+    {
+      "name": "Compounds",
+      "members": ["i", "xpx", "xpy", "pt", "psat"],
+      "sameTab": true
+    }
+  ],
+  "outputGroups": [
+    {
+      "name": "BIP",
+      "members": ["alpha", "a", "b", "_scalarsve_out"],
+      "sameTab": true
+    }
+  ],
+  "datatable": {
+    "class": "display",
+    "filter": "top",
+    "options": {
+      "buttons": "excel",
+      "dom": "Bfrtip",
+      "pageLength": 15
+    },
+    "extensions": "Buttons",
+    "rownames": false
+  }
+}

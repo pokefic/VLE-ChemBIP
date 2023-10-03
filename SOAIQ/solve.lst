@@ -1,0 +1,678 @@
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  43.4.1 3da5975b LEX-LEG
+GAMS 43.4.1  3da5975b Jun 22, 2023          LEX-LEG x86 64bit/Linux - 10/03/23 01:51:00 Page 1
+Optimization of Binary Parameters NRTL
+Range Statistics    SOLVE Opti Using NLP From line 176
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 7.365E+01] - Zero values observed as well
+Bound     [min, max] : [ 2.000E-01, 2.500E+03] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E-16, 2.531E+09] - Zero values observed as well
+
+GAMS 43.4.1  3da5975b Jun 22, 2023          LEX-LEG x86 64bit/Linux - 10/03/23 01:51:00 Page 2
+Optimization of Binary Parameters NRTL
+Model Statistics    SOLVE Opti Using NLP From line 176
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          12     SINGLE EQUATIONS          201
+BLOCKS OF VARIABLES          12     SINGLE VARIABLES          229
+NON ZERO ELEMENTS           901     NON LINEAR N-Z            672
+CODE LENGTH               3,075     CONSTANT POOL              77
+
+
+GENERATION TIME      =        0.002 SECONDS      4 MB  43.4.1 3da5975b LEX-LEG
+GAMS 43.4.1  3da5975b Jun 22, 2023          LEX-LEG x86 64bit/Linux - 10/03/23 01:51:00 Page 3
+Optimization of Binary Parameters NRTL
+Solution Report     SOLVE Opti Using NLP From line 176
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   Opti                OBJECTIVE  Obj
+     TYPE    NLP                 DIRECTION  MINIMIZE
+     SOLVER  BARON               FROM LINE  176
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      2 Locally Optimal
+**** OBJECTIVE VALUE                0.0086
+
+ RESOURCE USAGE, LIMIT         49.790 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+ EVALUATION ERRORS              0             0
+
+GAMS/BARON       43.4.1 3da5975b Jun 22, 2023          LEG x86 64bit/Linux    
+
+BARON is a product of The Optimization Firm, LLC. http://www.minlp.com/
+Parts of the BARON software were created at the
+University of Illinois at Urbana-Champaign.
+
+
+===========================================================================
+ BARON version 23.3.11. Built: LNX-64 Sat Mar 11 17:57:34 EST 2023
+
+ BARON is a product of The Optimization Firm.
+ For information on BARON, see https://minlp.com/about-baron
+
+ If you use this software, please cite publications from
+ https://minlp.com/baron-publications, such as: 
+
+ Khajavirad, A. and N. V. Sahinidis,
+ A hybrid LP/NLP paradigm for global optimization relaxations,
+ Mathematical Programming Computation, 10, 383-421, 2018.
+===========================================================================
+ This BARON run may utilize the following subsolver(s)
+ For LP/MIP/QP: CLP/CBC, ILOG CPLEX                             
+ For NLP: MINOS, SNOPT, External NLP, IPOPT, FILTERSQP
+
+Solution      = 0.00860979420562623  best solution found during preprocessing
+Best possible = 0.0086089333123
+Absolute gap  = 8.60893326232529E-7  optca = 1E-9
+Relative gap  = 9.99900004195178E-5  optcr = 0.0001
+
+
+---- EQU Ant  Antoine equation
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+1 .ET    73.304    73.304    73.304 -8.009E-7      
+1 .WA    73.649    73.649    73.649    -0.006      
+2 .ET    73.304    73.304    73.304     0.002      
+2 .WA    73.649    73.649    73.649     0.125      
+3 .ET    73.304    73.304    73.304     0.003      
+3 .WA    73.649    73.649    73.649     0.109      
+4 .ET    73.304    73.304    73.304     0.002      
+4 .WA    73.649    73.649    73.649 -2.874E-4      
+5 .ET    73.304    73.304    73.304     0.001      
+5 .WA    73.649    73.649    73.649     0.018      
+6 .ET    73.304    73.304    73.304     0.005      
+6 .WA    73.649    73.649    73.649     0.010      
+7 .ET    73.304    73.304    73.304     0.003      
+7 .WA    73.649    73.649    73.649     0.003      
+8 .ET    73.304    73.304    73.304     0.017      
+8 .WA    73.649    73.649    73.649     0.020      
+9 .ET    73.304    73.304    73.304    -0.238      
+9 .WA    73.649    73.649    73.649    -0.166      
+10.ET    73.304    73.304    73.304    -0.055      
+10.WA    73.649    73.649    73.649    -0.040      
+11.ET    73.304    73.304    73.304     0.375      
+11.WA    73.649    73.649    73.649     0.155      
+12.ET    73.304    73.304    73.304    -0.297      
+12.WA    73.649    73.649    73.649 -2.339E-4      
+
+---- EQU taue  Tau equation of NRTL
+
+            LOWER     LEVEL     UPPER    MARGINAL
+
+1 .ET.ET      .         .         .    -2.17E-10      
+1 .ET.WA      .         .         .    -7.881E-7      
+1 .WA.ET      .         .         .    -8.008E-7      
+1 .WA.WA      .         .         .       -0.006      
+2 .ET.ET      .         .         .    5.4579E-5      
+2 .ET.WA      .         .         .        0.002      
+2 .WA.ET      .         .         .        0.002      
+2 .WA.WA      .         .         .        0.123      
+3 .ET.ET      .         .         .    1.9834E-4      
+3 .ET.WA      .         .         .        0.003      
+3 .WA.ET      .         .         .        0.003      
+3 .WA.WA      .         .         .        0.106      
+4 .ET.ET      .         .         .    3.0477E-4      
+4 .ET.WA      .         .         .        0.002      
+4 .WA.ET      .         .         .        0.001      
+4 .WA.WA      .         .         .       -0.002      
+5 .ET.ET      .         .         .    2.0820E-4      
+5 .ET.WA      .         .         .        0.001      
+5 .WA.ET      .    1.776E-15      .        0.001      
+5 .WA.WA      .         .         .        0.016      
+6 .ET.ET      .         .         .        0.002      
+6 .ET.WA      .         .         .        0.004      
+6 .WA.ET      .         .         .        0.003      
+6 .WA.WA      .         .         .        0.006      
+7 .ET.ET      .         .         .        0.001      
+7 .ET.WA      .         .         .        0.003      
+7 .WA.ET      .         .         .        0.002      
+7 .WA.WA      .         .         .        0.001      
+8 .ET.ET      .         .         .        0.010      
+8 .ET.WA      .         .         .        0.012      
+8 .WA.ET      .         .         .        0.007      
+8 .WA.WA      .         .         .        0.008      
+9 .ET.ET      .         .         .       -0.184      
+9 .ET.WA      .         .         .       -0.120      
+9 .WA.ET      .         .         .       -0.053      
+9 .WA.WA      .         .         .       -0.046      
+10.ET.ET      .         .         .       -0.044      
+10.ET.WA      .         .         .       -0.026      
+10.WA.ET      .         .         .       -0.011      
+10.WA.WA      .         .         .       -0.014      
+11.ET.ET      .         .         .        0.329      
+11.ET.WA      .         .         .        0.119      
+11.WA.ET      .         .         .        0.046      
+11.WA.WA      .         .         .        0.036      
+12.ET.ET      .         .         .       -0.297      
+12.ET.WA      .         .         .    -2.337E-4      
+12.WA.ET      .         .         .    -6.967E-5      
+12.WA.WA      .         .         .    -1.517E-7      
+
+---- EQU Gexe  G equation of NRTL
+
+            LOWER     LEVEL     UPPER    MARGINAL
+
+1 .ET.ET      .         .         .    2.521E-10      
+1 .ET.WA      .         .         .    -2.601E-8      
+1 .WA.ET      .         .         .    -3.77E-10      
+1 .WA.WA      .         .         .    2.5803E-8      
+2 .ET.ET      .         .         .    -6.402E-5      
+2 .ET.WA      .         .         .    -4.671E-5      
+2 .WA.ET      .         .         .    9.7255E-5      
+2 .WA.WA      .         .         .    4.7016E-5      
+3 .ET.ET      .         .         .    -2.344E-4      
+3 .ET.WA      .         .         .    -2.581E-4      
+3 .WA.ET      .         .         .    3.6136E-4      
+3 .WA.WA      .         .         .    2.6359E-4      
+4 .ET.ET      .         .         .    -3.511E-4      
+4 .ET.WA      .         .         .    -1.771E-4      
+4 .WA.ET      .         .         .        0.001      
+4 .WA.WA      .         .         .    1.8280E-4      
+5 .ET.ET      .         .         .    -2.424E-4      
+5 .ET.WA      .         .         .    -2.005E-4      
+5 .WA.ET      .         .         .    3.8170E-4      
+5 .WA.WA      .         .         .    2.0919E-4      
+6 .ET.ET      .         .         .       -0.002      
+6 .ET.WA      .         .         .       -0.001      
+6 .WA.ET      .         .         .        0.003      
+6 .WA.WA      .         .         .        0.001      
+7 .ET.ET      .         .         .       -0.001      
+7 .ET.WA      .         .         .    -4.287E-4      
+7 .WA.ET      .         .         .        0.002      
+7 .WA.WA      .         .         .    4.5586E-4      
+8 .ET.ET      .         .         .       -0.009      
+8 .ET.WA      .         .         .       -0.002      
+8 .WA.ET      .         .         .        0.014      
+8 .WA.WA      .         .         .        0.002      
+9 .ET.ET      .         .         .        0.115      
+9 .ET.WA      .         .         .        0.015      
+9 .WA.ET      .         .         .       -0.189      
+9 .WA.WA      .         .         .       -0.016      
+10.ET.ET      .         .         .        0.024      
+10.ET.WA      .         .         .        0.003      
+10.WA.ET      .         .         .       -0.040      
+10.WA.WA      .         .         .       -0.003      
+11.ET.ET      .         .         .       -0.127      
+11.ET.WA      .         .         .       -0.010      
+11.WA.ET      .         .         .        0.209      
+11.WA.WA      .         .         .        0.011      
+12.ET.ET      .         .         .    2.8779E-4      
+12.ET.WA      .         .         .    5.7983E-8      
+12.WA.ET      .         .         .    -4.773E-4      
+12.WA.WA      .         .         .    -6.372E-8      
+
+---- EQU Gam  Gamma Equation of NRTL
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+1 .ET      .         .         .    -1.521E-7      
+1 .WA      .         .         .       -0.006      
+2 .ET      .         .         .    3.6697E-4      
+2 .WA      .         .         .        0.124      
+3 .ET      .         .         .        0.001      
+3 .WA      .         .         .        0.109      
+4 .ET      .         .         .    3.9849E-4      
+4 .WA      .         .         .    -2.860E-4      
+5 .ET      .    1.332E-15      .    3.6113E-4      
+5 .WA      .         .         .        0.017      
+6 .ET      .         .         .        0.001      
+6 .WA      .         .         .        0.010      
+7 .ET      .    1.332E-15      .        0.001      
+7 .WA      .         .         .        0.003      
+8 .ET      .         .         .        0.008      
+8 .WA      .         .         .        0.018      
+9 .ET      .         .         .       -0.170      
+9 .WA      .         .         .       -0.127      
+10.ET      .         .         .       -0.045      
+10.WA      .         .         .       -0.028      
+11.ET      .         .         .        0.341      
+11.WA      .         .         .        0.093      
+12.ET      .         .         .       -0.297      
+12.WA      .         .         .    -9.992E-5      
+
+---- EQU Eq  Equilibrium Equation
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+1 .ET      .    2.842E-14      .    -5.650E-9      
+1 .WA      .         .         .    -6.121E-8      
+2 .ET      .         .         .    1.4676E-7      
+2 .WA      .    1.455E-11      .    1.4049E-6      
+3 .ET      .         .         .    1.3805E-7      
+3 .WA      .    -1.46E-11      .    1.4012E-6      
+4 .ET      .    -3.64E-12      .    5.4988E-8      
+4 .WA      .    -1.46E-11      .    -4.077E-9      
+5 .ET      .         .         .    3.6573E-8      
+5 .WA      .         .         .    2.7734E-7      
+6 .ET      .         .         .    1.0492E-7      
+6 .WA      .    -7.28E-12      .    1.8119E-7      
+7 .ET      .         .         .    6.2393E-8      
+7 .WA      .    7.276E-12      .    6.3804E-8      
+8 .ET      .         .         .    3.0263E-7      
+8 .WA      .    -7.28E-12      .    4.3798E-7      
+9 .ET      .    -7.28E-12      .    -3.806E-6      
+9 .WA      .    7.276E-12      .    -4.308E-6      
+10.ET      .         .         .    -8.373E-7      
+10.WA      .    -7.28E-12      .    -1.151E-6      
+11.ET      .         .         .    5.1805E-6      
+11.WA      .         .         .    5.4014E-6      
+12.ET      .    -1.46E-11      .    -2.941E-6      
+12.WA      .    -1.42E-14      .    -2.910E-6      
+
+---- EQU Res1  Balance y
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+1      1.000     1.000     1.000     0.006      
+2      1.000     1.000     1.000    -0.078      
+3      1.000     1.000     1.000    -0.078      
+4      1.000     1.000     1.000    -0.003      
+5      1.000     1.000     1.000    -0.016      
+6      1.000     1.000     1.000    -0.014      
+7      1.000     1.000     1.000    -0.006      
+8      1.000     1.000     1.000    -0.037      
+9      1.000     1.000     1.000     0.410      
+10     1.000     1.000     1.000     0.100      
+11     1.000     1.000     1.000    -0.535      
+12     1.000     1.000     1.000     0.297      
+
+---- EQU Res2  Balance x
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+1      1.000     1.000     1.000    -0.006      
+2      1.000     1.000     1.000     0.135      
+3      1.000     1.000     1.000     0.112      
+4      1.000     1.000     1.000     0.015      
+5      1.000     1.000     1.000     0.020      
+6      1.000     1.000     1.000     0.023      
+7      1.000     1.000     1.000     0.010      
+8      1.000     1.000     1.000     0.042      
+9      1.000     1.000     1.000    -0.416      
+10     1.000     1.000     1.000    -0.096      
+11     1.000     1.000     1.000     0.516      
+12     1.000     1.000     1.000    -0.297      
+
+---- EQU Res3  alpha verification
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+ET.WA      .         .         .        0.001      
+WA.ET      .         .         .         .         
+
+---- EQU Res4  alpha 0
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+ET.WA      .         .         .         .         
+WA.ET      .         .         .         .         
+
+---- EQU Res5  Diagonal
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+ET      .         .         .       -0.183      
+WA      .         .         .        0.227      
+
+---- EQU Res6  Diagonal
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+ET      .         .         .       -0.001      
+WA      .         .         .        0.001      
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- EQU Obje            .         .         .        1.000      
+
+  Obje  Objective function
+
+---- VAR P  Presure Model
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+1       .    1.0103E+5     +INF       .         
+2       .    1.0103E+5     +INF       .         
+3       .    1.0103E+5     +INF       .         
+4       .    1.0103E+5     +INF       .         
+5       .    1.0103E+5     +INF       .         
+6       .    1.0103E+5     +INF       .         
+7       .    1.0103E+5     +INF       .         
+8       .    1.0103E+5     +INF       .         
+9       .    1.0103E+5     +INF       .         
+10      .    1.0103E+5     +INF       .         
+11      .    1.0103E+5     +INF       .         
+12      .    1.0103E+5     +INF       .         
+
+---- VAR T  Temperature of Model
+
+      LOWER     LEVEL     UPPER    MARGINAL
+
+1       .      373.050     +INF       .         
+2       .      369.798     +INF       .         
+3       .      366.618     +INF       .         
+4       .      364.360     +INF       .         
+5       .      362.070     +INF       .         
+6       .      359.640     +INF       .         
+7       .      358.070     +INF       .         
+8       .      355.919     +INF       .         
+9       .      353.959     +INF       .         
+10      .      353.242     +INF       .         
+11      .      352.439     +INF       .         
+12      .      351.386     +INF       .         
+
+---- VAR Ps  Saturation Presure of i
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+1 .ET      .    2.2374E+5     +INF       .         
+1 .WA      .    1.0090E+5     +INF       .         
+2 .ET      .    1.9996E+5     +INF       .         
+2 .WA      .    89738.981     +INF       .         
+3 .ET      .    1.7875E+5     +INF       .         
+3 .WA      .    79837.294     +INF       .         
+4 .ET      .    1.6484E+5     +INF       .         
+4 .WA      .    73372.595     +INF       .         
+5 .ET      .    1.5165E+5     +INF       .         
+5 .WA      .    67266.721     +INF       .         
+6 .ET      .    1.3861E+5     +INF       .         
+6 .WA      .    61258.205     +INF       .         
+7 .ET      .    1.3069E+5     +INF       .         
+7 .WA      .    57620.300     +INF       .         
+8 .ET      .    1.2045E+5     +INF       .         
+8 .WA      .    52931.327     +INF       .         
+9 .ET      .    1.1170E+5     +INF       .         
+9 .WA      .    48939.468     +INF       .         
+10.ET      .    1.0864E+5     +INF       .         
+10.WA      .    47545.013     +INF       .         
+11.ET      .    1.0529E+5     +INF       .         
+11.WA      .    46021.708     +INF       .         
+12.ET      .    1.0103E+5     +INF       .         
+12.WA      .    44087.152     +INF       .         
+
+---- VAR x  Liquid fraction of component i
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+1 .ET      .    1.2032E-4     +INF       .         
+1 .WA      .        1.000     +INF       .         
+2 .ET      .        0.013     +INF       .         
+2 .WA      .        0.987     +INF       .         
+3 .ET      .        0.029     +INF       .         
+3 .WA      .        0.971     +INF       .         
+4 .ET      .        0.044     +INF       .         
+4 .WA      .        0.956     +INF       .         
+5 .ET      .        0.065     +INF       .         
+5 .WA      .        0.935     +INF       .         
+6 .ET      .        0.099     +INF       .         
+6 .WA      .        0.901     +INF       .         
+7 .ET      .        0.133     +INF       .         
+7 .WA      .        0.867     +INF       .         
+8 .ET      .        0.220     +INF       .         
+8 .WA      .        0.780     +INF       .         
+9 .ET      .        0.399     +INF       .         
+9 .WA      .        0.601     +INF       .         
+10.ET      .        0.496     +INF       .         
+10.WA      .        0.504     +INF       .         
+11.ET      .        0.625     +INF       .         
+11.WA      .        0.375     +INF       .         
+12.ET      .        0.999     +INF       .         
+12.WA      .        0.001     +INF       .         
+
+---- VAR y  Vapor fraction of component i
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+1 .ET      .        0.001     +INF       .         
+1 .WA      .        0.999     +INF       .         
+2 .ET      .        0.123     +INF       .         
+2 .WA      .        0.877     +INF       .         
+3 .ET      .        0.231     +INF       .         
+3 .WA      .        0.769     +INF       .         
+4 .ET      .        0.302     +INF       .         
+4 .WA      .        0.698     +INF       .         
+5 .ET      .        0.371     +INF       .         
+5 .WA      .        0.629     +INF       .         
+6 .ET      .        0.440     +INF       .         
+6 .WA      .        0.560     +INF       .         
+7 .ET      .        0.485     +INF       .         
+7 .WA      .        0.515     +INF       .         
+8 .ET      .        0.547     +INF       .         
+8 .WA      .        0.453     +INF       .         
+9 .ET      .        0.618     +INF       .         
+9 .WA      .        0.382     +INF       .         
+10.ET      .        0.655     +INF       .         
+10.WA      .        0.345     +INF       .         
+11.ET      .        0.716     +INF       .         
+11.WA      .        0.284     +INF       .         
+12.ET      .        0.999     +INF       .         
+12.WA      .        0.001     +INF       .         
+
+---- VAR alpha  Binary interaction alpha
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+ET.ET     0.200     0.248     0.426      .         
+ET.WA     0.200     0.248     0.426      .         
+WA.ET     0.200     0.248     0.426      .         
+WA.WA     0.200     0.248     0.426      .         
+
+---- VAR Gex  G variable of NRTL
+
+            LOWER     LEVEL     UPPER    MARGINAL
+
+1 .ET.ET      .        1.000     +INF       .         
+1 .ET.WA      .        0.992     +INF       .         
+1 .WA.ET      .        0.668     +INF       .         
+1 .WA.WA      .        1.000     +INF       .         
+2 .ET.ET      .        1.000     +INF       .         
+2 .ET.WA      .        1.007     +INF       .         
+2 .WA.ET      .        0.658     +INF       .         
+2 .WA.WA      .        1.000     +INF       .         
+3 .ET.ET      .        1.000     +INF       .         
+3 .ET.WA      .        1.021     +INF       .         
+3 .WA.ET      .        0.649     +INF       .         
+3 .WA.WA      .        1.000     +INF       .         
+4 .ET.ET      .        1.000     +INF       .         
+4 .ET.WA      .        1.032     +INF       .         
+4 .WA.ET      .        0.642     +INF       .         
+4 .WA.WA      .        1.000     +INF       .         
+5 .ET.ET      .        1.000     +INF       .         
+5 .ET.WA      .        1.043     +INF       .         
+5 .WA.ET      .        0.635     +INF       .         
+5 .WA.WA      .        1.000     +INF       .         
+6 .ET.ET      .        1.000     +INF       .         
+6 .ET.WA      .        1.055     +INF       .         
+6 .WA.ET      .        0.628     +INF       .         
+6 .WA.WA      .        1.000     +INF       .         
+7 .ET.ET      .        1.000     +INF       .         
+7 .ET.WA      .        1.063     +INF       .         
+7 .WA.ET      .        0.623     +INF       .         
+7 .WA.WA      .        1.000     +INF       .         
+8 .ET.ET      .        1.000     +INF       .         
+8 .ET.WA      .        1.074     +INF       .         
+8 .WA.ET      .        0.617     +INF       .         
+8 .WA.WA      .        1.000     +INF       .         
+9 .ET.ET      .        1.000     +INF       .         
+9 .ET.WA      .        1.085     +INF       .         
+9 .WA.ET      .        0.611     +INF       .         
+9 .WA.WA      .        1.000     +INF       .         
+10.ET.ET      .        1.000     +INF       .         
+10.ET.WA      .        1.089     +INF       .         
+10.WA.ET      .        0.609     +INF       .         
+10.WA.WA      .        1.000     +INF       .         
+11.ET.ET      .        1.000     +INF       .         
+11.ET.WA      .        1.093     +INF       .         
+11.WA.ET      .        0.606     +INF       .         
+11.WA.WA      .        1.000     +INF       .         
+12.ET.ET      .        1.000     +INF       .         
+12.ET.WA      .        1.099     +INF       .         
+12.WA.ET      .        0.603     +INF       .         
+12.WA.WA      .        1.000     +INF       .         
+
+---- VAR gama  Gamma variable of NRTL (activity)
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+1 .ET      .        5.266     +INF       .         
+1 .WA      .        1.000     +INF       .         
+2 .ET      .        4.951     +INF       .         
+2 .WA      .        1.000     +INF       .         
+3 .ET      .        4.558     +INF       .         
+3 .WA      .        1.002     +INF       .         
+4 .ET      .        4.214     +INF       .         
+4 .WA      .        1.005     +INF       .         
+5 .ET      .        3.795     +INF       .         
+5 .WA      .        1.011     +INF       .         
+6 .ET      .        3.247     +INF       .         
+6 .WA      .        1.024     +INF       .         
+7 .ET      .        2.814     +INF       .         
+7 .WA      .        1.043     +INF       .         
+8 .ET      .        2.089     +INF       .         
+8 .WA      .        1.108     +INF       .         
+9 .ET      .        1.399     +INF       .         
+9 .WA      .        1.313     +INF       .         
+10.ET      .        1.228     +INF       .         
+10.WA      .        1.454     +INF       .         
+11.ET      .        1.099     +INF       .         
+11.WA      .        1.663     +INF       .         
+12.ET      .        1.000     +INF       .         
+12.WA      .        2.341     +INF       .         
+
+---- VAR tau  Tau variable of NRTL
+
+            LOWER     LEVEL     UPPER    MARGINAL
+
+1 .ET.ET     -INF       .        +INF       .         
+1 .ET.WA     -INF      0.032     +INF       .         
+1 .WA.ET     -INF      1.630     +INF       .         
+1 .WA.WA     -INF       .        +INF       .         
+2 .ET.ET     -INF       .        +INF       .         
+2 .ET.WA     -INF     -0.026     +INF       .         
+2 .WA.ET     -INF      1.689     +INF       .         
+2 .WA.WA     -INF       .        +INF       .         
+3 .ET.ET     -INF       .        +INF       .         
+3 .ET.WA     -INF     -0.085     +INF       .         
+3 .WA.ET     -INF      1.747     +INF       .         
+3 .WA.WA     -INF       .        +INF       .         
+4 .ET.ET     -INF       .        +INF       .         
+4 .ET.WA     -INF     -0.127     +INF       .         
+4 .WA.ET     -INF      1.790     +INF       .         
+4 .WA.WA     -INF       .        +INF       .         
+5 .ET.ET     -INF       .        +INF       .         
+5 .ET.WA     -INF     -0.171     +INF       .         
+5 .WA.ET     -INF      1.833     +INF       .         
+5 .WA.WA     -INF       .        +INF       .         
+6 .ET.ET     -INF       .        +INF       .         
+6 .ET.WA     -INF     -0.217     +INF       .         
+6 .WA.ET     -INF      1.880     +INF       .         
+6 .WA.WA     -INF       .        +INF       .         
+7 .ET.ET     -INF       .        +INF       .         
+7 .ET.WA     -INF     -0.248     +INF       .         
+7 .WA.ET     -INF      1.910     +INF       .         
+7 .WA.WA     -INF       .        +INF       .         
+8 .ET.ET     -INF       .        +INF       .         
+8 .ET.WA     -INF     -0.290     +INF       .         
+8 .WA.ET     -INF      1.952     +INF       .         
+8 .WA.WA     -INF       .        +INF       .         
+9 .ET.ET     -INF       .        +INF       .         
+9 .ET.WA     -INF     -0.329     +INF       .         
+9 .WA.ET     -INF      1.991     +INF       .         
+9 .WA.WA     -INF       .        +INF       .         
+10.ET.ET     -INF       .        +INF       .         
+10.ET.WA     -INF     -0.343     +INF       .         
+10.WA.ET     -INF      2.005     +INF       .         
+10.WA.WA     -INF       .        +INF       .         
+11.ET.ET     -INF       .        +INF       .         
+11.ET.WA     -INF     -0.359     +INF       .         
+11.WA.ET     -INF      2.022     +INF       .         
+11.WA.WA     -INF       .        +INF       .         
+12.ET.ET     -INF       .        +INF       .         
+12.ET.WA     -INF     -0.381     +INF       .         
+12.WA.ET     -INF      2.043     +INF       .         
+12.WA.WA     -INF       .        +INF       .         
+
+---- VAR a  Binary interaction Parameter a
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+ET.ET   -10.000      .       10.000      .         
+ET.WA   -10.000     6.734    10.000      .         
+WA.ET   -10.000    -5.072    10.000      .         
+WA.WA   -10.000      .       10.000      .         
+
+---- VAR b  Binary interaction Parameter b
+
+         LOWER     LEVEL     UPPER    MARGINAL
+
+ET.ET -2500.000      .     2500.000      .         
+ET.WA -2500.000 -2500.000  2500.000 7.8392E-8      
+WA.ET -2500.000  2500.000  2500.000 -5.016E-7      
+WA.WA -2500.000      .     2500.000      .         
+
+                       LOWER     LEVEL     UPPER    MARGINAL
+
+---- VAR Obj            -INF      0.009     +INF       .         
+
+  Obj  Objective of optimization
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+                             0     ERRORS
+GAMS 43.4.1  3da5975b Jun 22, 2023          LEX-LEG x86 64bit/Linux - 10/03/23 01:51:00 Page 4
+Optimization of Binary Parameters NRTL
+E x e c u t i o n
+
+
+----    179 VARIABLE a.L  Binary interaction Parameter a
+
+            ET          WA
+
+ET                   6.734
+WA      -5.072
+
+
+----    179 VARIABLE b.L  Binary interaction Parameter b
+
+            ET          WA
+
+ET               -2500.000
+WA    2500.000
+
+
+----    179 VARIABLE alpha.L  Binary interaction alpha
+
+            ET          WA
+
+ET       0.248       0.248
+WA       0.248       0.248
+
+
+----    179 VARIABLE Obj.L                 =        0.009  Objective of optimiz
+                                                           ation
+
+
+EXECUTION TIME       =       49.824 SECONDS      4 MB  43.4.1 3da5975b LEX-LEG
+
+
+USER: NEOS Server License prod-exec-7.neos-server.orgS221207/0001AB-GEN
+      mac@2c:ea:7f:71:ac:18                                     DCE1890
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Restart    /var/lib/condor/execute/dir_61093/gamsexec/restart.g00
+Input      /var/lib/condor/execute/dir_61093/gamsexec/MODEL.gms
+Output     /var/lib/condor/execute/dir_61093/gamsexec/solve.lst

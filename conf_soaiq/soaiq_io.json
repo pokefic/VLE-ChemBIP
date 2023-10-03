@@ -1,0 +1,243 @@
+{
+	"modelTitle":	"Optimization of Binary Parameters NRTL",
+	"inputSymbols":	{
+		"i":	{
+			"alias":	"Compounds",
+			"symtype":	"set",
+			"headers":	{
+				"uni":	{
+					"type":	"string",
+					"alias":	"Universal set"
+				},
+				"text":	{
+					"type":	"string",
+					"alias":	"Set text Compounds"
+				}
+			}
+		},
+		"xpx":	{
+			"alias":	"Composition of experimental Data",
+			"symtype":	"parameter",
+			"headers":	{
+				"k":	{
+					"type":	"string",
+					"alias":	"Number of experimental points"
+				},
+				"i":	{
+					"type":	"string",
+					"alias":	"Compounds"
+				},
+				"value":	{
+					"type":	"numeric",
+					"alias":	"Composition of experimental Data"
+				}
+			}
+		},
+		"xpy":	{
+			"alias":	"Composition of experimental Data",
+			"symtype":	"parameter",
+			"headers":	{
+				"k":	{
+					"type":	"string",
+					"alias":	"Number of experimental points"
+				},
+				"i":	{
+					"type":	"string",
+					"alias":	"Compounds"
+				},
+				"value":	{
+					"type":	"numeric",
+					"alias":	"Composition of experimental Data"
+				}
+			}
+		},
+		"pt":	{
+			"alias":	"Experimental Condition",
+			"symtype":	"parameter",
+			"headers":	{
+				"k":	{
+					"type":	"string",
+					"alias":	"Number of experimental points"
+				},
+				"texp":	{
+					"type":	"numeric",
+					"alias":	"Temperature"
+				},
+				"pexp":	{
+					"type":	"numeric",
+					"alias":	"Presure"
+				}
+			}
+		},
+		"psat":	{
+			"alias":	"Parameters of Antoine Equation for compounds",
+			"symtype":	"parameter",
+			"headers":	{
+				"i":	{
+					"type":	"string",
+					"alias":	"Compounds"
+				},
+				"1st":	{
+					"type":	"numeric",
+					"alias":	"1st"
+				},
+				"2nd":	{
+					"type":	"numeric",
+					"alias":	"2nd"
+				},
+				"3rd":	{
+					"type":	"numeric",
+					"alias":	"3rd"
+				},
+				"4th":	{
+					"type":	"numeric",
+					"alias":	"4th"
+				},
+				"5th":	{
+					"type":	"numeric",
+					"alias":	"5th"
+				}
+			}
+		}
+	},
+	"outputSymbols":	{
+		"alpha":	{
+			"alias":	"Binary interaction alpha",
+			"symtype":	"variable",
+			"headers":	{
+				"i":	{
+					"type":	"string",
+					"alias":	"Compounds"
+				},
+				"j":	{
+					"type":	"string",
+					"alias":	"Aliased with i"
+				},
+				"level":	{
+					"type":	"numeric",
+					"alias":	"Level"
+				},
+				"marginal":	{
+					"type":	"numeric",
+					"alias":	"Marginal"
+				},
+				"lower":	{
+					"type":	"numeric",
+					"alias":	"Lower"
+				},
+				"upper":	{
+					"type":	"numeric",
+					"alias":	"Upper"
+				},
+				"scale":	{
+					"type":	"numeric",
+					"alias":	"Scale"
+				}
+			}
+		},
+		"a":	{
+			"alias":	"Binary interaction Parameter a",
+			"symtype":	"variable",
+			"headers":	{
+				"i":	{
+					"type":	"string",
+					"alias":	"Compounds"
+				},
+				"j":	{
+					"type":	"string",
+					"alias":	"Aliased with i"
+				},
+				"level":	{
+					"type":	"numeric",
+					"alias":	"Level"
+				},
+				"marginal":	{
+					"type":	"numeric",
+					"alias":	"Marginal"
+				},
+				"lower":	{
+					"type":	"numeric",
+					"alias":	"Lower"
+				},
+				"upper":	{
+					"type":	"numeric",
+					"alias":	"Upper"
+				},
+				"scale":	{
+					"type":	"numeric",
+					"alias":	"Scale"
+				}
+			}
+		},
+		"b":	{
+			"alias":	"Binary interaction Parameter b",
+			"symtype":	"variable",
+			"headers":	{
+				"i":	{
+					"type":	"string",
+					"alias":	"Compounds"
+				},
+				"j":	{
+					"type":	"string",
+					"alias":	"Aliased with i"
+				},
+				"level":	{
+					"type":	"numeric",
+					"alias":	"Level"
+				},
+				"marginal":	{
+					"type":	"numeric",
+					"alias":	"Marginal"
+				},
+				"lower":	{
+					"type":	"numeric",
+					"alias":	"Lower"
+				},
+				"upper":	{
+					"type":	"numeric",
+					"alias":	"Upper"
+				},
+				"scale":	{
+					"type":	"numeric",
+					"alias":	"Scale"
+				}
+			}
+		},
+		"_scalarsve_out":	{
+			"alias":	"Output Variable/Equation Scalars",
+			"symnames":	["obj"],
+			"symtext":	["Objective of optimization"],
+			"symtypes":	["variable"],
+			"headers":	{
+				"scalar":	{
+					"type":	"string",
+					"alias":	"Scalar Name"
+				},
+				"description":	{
+					"type":	"string",
+					"alias":	"Scalar Description"
+				},
+				"level":	{
+					"type":	"numeric",
+					"alias":	"Level"
+				},
+				"marginal":	{
+					"type":	"numeric",
+					"alias":	"Marginal"
+				},
+				"lower":	{
+					"type":	"numeric",
+					"alias":	"Lower"
+				},
+				"upper":	{
+					"type":	"numeric",
+					"alias":	"Upper"
+				},
+				"scale":	{
+					"type":	"numeric",
+					"alias":	"Scale"
+				}
+			}
+		}
+	}
+}

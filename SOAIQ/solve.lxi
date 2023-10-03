@@ -1,0 +1,32 @@
+B 6 Range Statistics    SOLVE Opti Using NLP From line 176
+B 17 Model Statistics    SOLVE Opti Using NLP From line 176
+B 31 Solution Report     SOLVE Opti Using NLP From line 176
+F 78 Ant
+F 107 taue
+F 160 Gexe
+F 213 Gam
+F 242 Eq
+F 271 Res1
+F 288 Res2
+F 305 Res3
+F 312 Res4
+F 319 Res5
+F 326 Res6
+F 335 Obje
+G 339 P
+G 356 T
+G 373 Ps
+G 402 x
+G 431 y
+G 460 alpha
+G 469 Gex
+G 522 gama
+G 551 tau
+G 604 a
+G 613 b
+G 624 Obj
+B 635 E x e c u t i o n
+I 635 a
+I 644 b
+I 652 alpha
+I 661 Obj

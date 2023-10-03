@@ -1,0 +1,1338 @@
+GAMS 44.4.0  06604687 Sep 19, 2023          WEX-WEI x86 64bit/MS Windows - 10/03/23 04:59:11 Page 1
+Optimization of Binary Parameters NRTL
+C o m p i l a t i o n
+
+
+   2   
+      This is a GAMS-code to estimate Binary interaction parameters for VLE.
+   6   
+   8  Set
+   9      i 'Compounds'
+  10      / ET    'Ethanol'
+  11        WA    'Water' /
+  13      PTexp 'Presión and Temperature'
+  14      / Texp  'Temperature'
+  15        Pexp  'Presure' /
+  16   
+  17      PsPar 'Parameters of Antoine Equation'
+  18      / 1st
+  19        2nd
+  20        3rd
+  21        4th
+  22        5th /;
+  23   
+  24  Alias (i,j,h);
+  25   
+  26  Set       k 'Number of experimental points';
+  27   
+  28   
+  30  Parameter Table xpx(k<,i) 'Composition of experimental Data'
+  31  *       Liq-1        Liq-2
+  32            ET          WA
+  33      1   1e-16       1.0000
+  34      2   0.0170      0.9830
+  35      3   0.0287      0.9713
+  36      4   0.0516      0.9484
+  37      5   0.0655      0.9345
+  38      6   0.1042      0.8958
+  39      7   0.1355      0.8645
+  40      8   0.2243      0.7757
+  41      9   0.3695      0.6305
+  42      10  0.4924      0.5076
+  43      11  0.6529      0.3471
+  44      12  1.0000      1e-16 ;
+  45   
+  46  Table xpy(k,i) 'Composition of experimental Data'
+  47  *        Vap-1      Vap-2
+  48            ET          WA
+  49      1   1e-16      1.0000
+  50      2   0.1543      0.8457
+  51      3   0.2627      0.7373
+  52      4   0.3008      0.6992
+  53      5   0.3770      0.6230
+  54      6   0.4424      0.5576
+  55      7   0.4846      0.5154
+  56      8   0.5504      0.4496
+  57      9   0.6052      0.3948
+  58      10  0.6473      0.3527
+  59      11  0.7212      0.2788
+  60      12  1.0000      1e-16;
+  61   
+  62   
+  63   
+  64  Table PT(k,PTexp) 'Experimental Condition'
+  65  *    Presure(Pa)   Temperature(K)
+  66            Pexp        Texp
+  67      1    101.03e3    373.05
+  68      2    101.03e3    369.80
+  69      3    101.03e3    366.62
+  70      4    101.03e3    364.36
+  71      5    101.03e3    362.07
+  72      6    101.03e3    359.64
+  73      7    101.03e3    358.07
+  74      8    101.03e3    355.92
+  75      9    101.03e3    353.95
+  76      10   101.03e3    353.24
+  77      11   101.03e3    352.45
+  78      12   101.03e3    351.38;
+  79   
+  80  Table Psat(i,PsPar) 'Parameters of Antoine Equation for compounds'
+  81             1st         2nd       3rd          4th         5th
+  82      ET   73.304     -7122.3    -7.1424     2.8853e-6      2
+  83      WA   73.649     -7258.2    -7.3037     4.1653e-6      2;
+  85   
+  86  Positive Variable
+  87      P(k)              'Presure Model'
+  88      T(k)              'Temperature of Model'
+  89      Ps(k,i)           'Saturation Presure of i'
+  90      x(k,i)            'Liquid fraction of component i'
+  91      y(k,i)            'Vapor fraction of component i'
+  93      alpha(i,j)        'Binary interaction alpha'
+  95      Gex(k,i,j)        'G variable of NRTL'
+  96      gama(k,i)        'Gamma variable of NRTL (activity)';
+  97   
+  98  Variable
+  99      tau(k,i,j)        'Tau variable of NRTL'
+ 101      a(i,j)            'Binary interaction Parameter a'
+ 102      b(i,j)            'Binary interaction Parameter b'
+ 103      Obj               'Objective of optimization';
+ 105  Equation
+ 106      Ant(k,i)          'Antoine equation'
+ 107      taue(k,i,j)       'Tau equation of NRTL'
+ 108      Gexe(k,i,j)       'G equation of NRTL'
+ 109      Gam(k,i)          'Gamma Equation of NRTL'
+ 110      Eq(k,i)           'Equilibrium Equation'
+ 111      Res1(k)           'Balance y'
+ 112      Res2(k)           'Balance x'
+ 113      Res3(i,j)         'alpha verification'
+ 114      Res4(i,j)         'alpha 0'
+ 115      Res5(i)           'Diagonal'
+ 116      Res6(i)           'Diagonal'
+ 117      Obje              'Objective function';
+ 118   
+ 119   
+ 120  Ant(k,i)..      log(Ps(k,i)) =e= Psat(i,'1st') + Psat(i,'2nd')/T(k) +
+ 121                  Psat(i,'3rd')*log(T(k)) + Psat(i,'4th')*(T(k) ** Psat(i,'5th'));
+ 122   
+ 123  taue(k,i,j)..   tau(k,i,j) =e= a(i,j) + b(i,j)/T(k);
+ 124  Gexe(k,i,j)..   Gex(k,i,j) =e= exp(-alpha(i,j) * tau(k,i,j));
+ 125   
+ 126  Gam(k,i)..      gama(k,i) =e= exp((sum(j, tau(k,j,i) * Gex(k,j,i) * x(k,j))/
+ 127                  sum(h, Gex(k,h,i) * x(k,h))) + sum(j, (x(k,j) * Gex(k,i,j)/
+ 128                  sum(h, Gex(k,h,j) * x(k,h))) * (tau(k,i,j) -
+ 129                  sum(h, x(k,h) * tau(k,h,j) * Gex(k,h,j)) /
+ 130                  sum(h, x(k,h) * Gex(k,h,j)))));
+ 131   
+ 132  Eq(k,i)..       P(k) * y(k,i) =e= gama(k,i) * x(k,i) * Ps(k,i);
+ 133   
+ 134  Res1(k)..       sum(i, y(k,i)) =e= 1;
+ 135  Res2(k)..       sum(i, x(k,i)) =e= 1;
+ 136  Res3(i,j)..     alpha(i,j) =e= alpha(j,i);
+ 137  Res4(i,j)..     alpha(i,i) =e= alpha(i,j);
+ 138  Res5(i)..       a(i,i)     =e= 0;
+ 139  Res6(i)..       b(i,i)     =e= 0;
+ 140   
+ 141  Obje..          obj =e= sum((k,i), power(x(k,i) - xpx(k,i), 2)) +
+ 142                  sum((k,i), power(y(k,i) - xpy(k,i), 2)) +
+ 143                  sum(k, power(P(k) - PT(k,'Pexp'), 2)) +
+ 144                  sum(k, power(T(k) - PT(k,'Texp'), 2));
+ 145   
+ 146  * Initilization parameters
+ 147      alpha.l(i,j)  =  0.2;
+ 148   
+ 149      a.l(i,j)      =  5;
+ 150      b.l(i,j)      =  1000;
+ 151      a.l(i,i)      =  0;
+ 152      b.l(i,i)      =  0;
+ 153   
+ 154   
+ 155      P.l(k)        =  PT(k,'Pexp');
+ 156      T.l(k)        =  PT(k,'Texp');
+ 157      x.l(k,i)      =  xpx(k,i);
+ 158      y.l(k,i)      =  xpy(k,i) ;
+ 159      Ps.l(k,i)     =  exp(Psat(i,'1st') + Psat(i,'2nd')/T.l(k) +
+ 160                       Psat(i,'3rd')*log(T.l(k)) + Psat(i,'4th')*(T.l(k) ** Psat(i,'5th')));
+ 161      tau.l(k,i,j)  =  a.l(i,j) + b.l(i,j)/T.l(k);
+ 162      Gex.l(k,i,j)  =  exp(-alpha.l(i,j) * tau.l(k,i,j));
+ 163   
+ 164      gama.l(k,i)   =  exp((sum(j, tau.l(k,j,i) * Gex.l(k,j,i) * x.l(k,j))/
+ 165                       sum(h, Gex.l(k,h,i) * x.l(k,h))) + sum(j, (x.l(k,j) * Gex.l(k,i,j)/
+ 166                       sum(h, Gex.l(k,h,j) * x.l(k,h))) * (tau.l(k,i,j) -
+ 167                       sum(h, x.l(k,h) * tau.l(k,h,j) * Gex.l(k,h,j)) /
+ 168                       sum(h, x.l(k,h) * Gex.l(k,h,j)))));
+ 169   
+ 170      a.lo(i,j)     =  -10;
+ 171      a.up(i,j)     =   10;
+ 172   
+ 173      b.lo(i,j)     =  -2500;
+ 174      b.up(i,j)     =   2500;
+ 175   
+ 176      alpha.lo(i,j) =   0.2;
+ 177      alpha.up(i,j) =   0.426;
+ 178   
+ 179  Model Opti / all /;
+ 180   
+ 181  *Options NLP = IPOPT;
+ 182   
+ 183  solve Opti using NLP minimizing obj;
+ 184   
+ 185  display a.l,b.l,alpha.l,obj.l;
+ 186   
+ 187   
+ 188   
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  44.4.0 06604687 WEX-WEI
+GAMS 44.4.0  06604687 Sep 19, 2023          WEX-WEI x86 64bit/MS Windows - 10/03/23 04:59:11 Page 2
+Optimization of Binary Parameters NRTL
+Equation Listing    SOLVE Opti Using NLP From line 183
+
+
+---- Ant  =E=  Antoine equation
+
+Ant(1,ET)..  - (0.0341851008578408)*T(1) + (4.46956863505746E-6)*Ps(1,ET) =E= 73.304 ; (LHS = 73.304)
+     
+Ant(1,WA)..  - (0.0356842566410299)*T(1) + (9.91080508487718E-6)*Ps(1,WA) =E= 73.649 ; (LHS = 73.649)
+     
+Ant(2,ET)..  - (0.0349015995730994)*T(2) + (5.00057129021687E-6)*Ps(2,ET) =E= 73.304 ; (LHS = 73.304)
+     
+REMAINING 21 ENTRIES SKIPPED
+
+
+---- taue  =E=  Tau equation of NRTL
+
+taue(1,ET,ET)..  (0)*T(1) + tau(1,ET,ET) - a(ET,ET) - (0.00268060581691462)*b(ET,ET) =E= 0 ; (LHS = 0)
+     
+taue(1,ET,WA)..  (0.00718564754567651)*T(1) + tau(1,ET,WA) - a(ET,WA) - (0.00268060581691462)*b(ET,WA) =E= 0 ; (LHS = 0)
+     
+taue(1,WA,ET)..  (0.00718564754567651)*T(1) + tau(1,WA,ET) - a(WA,ET) - (0.00268060581691462)*b(WA,ET) =E= 0 ; (LHS = 0)
+     
+REMAINING 45 ENTRIES SKIPPED
+
+
+---- Gexe  =E=  G equation of NRTL
+
+Gexe(1,ET,ET)..  (0)*alpha(ET,ET) + Gex(1,ET,ET) + (0.2)*tau(1,ET,ET) =E= 0 ; (LHS = 0)
+     
+Gexe(1,ET,WA)..  (1.65297593949965)*alpha(ET,WA) + Gex(1,ET,WA) + (0.0430428531004517)*tau(1,ET,WA) =E= 0 ; (LHS = 0)
+     
+Gexe(1,WA,ET)..  (1.65297593949965)*alpha(WA,ET) + Gex(1,WA,ET) + (0.0430428531004517)*tau(1,WA,ET) =E= 0 ; (LHS = 0)
+     
+REMAINING 45 ENTRIES SKIPPED
+
+
+---- Gam  =E=  Gamma Equation of NRTL
+
+Gam(1,ET)..  (815427.089145807)*x(1,ET) - (9.10048354675632E-11)*x(1,WA) + (8.07379039696102E-11)*Gex(1,ET,ET) - (86879.7435050578)*Gex(1,ET,WA) - (4.28696341396686E-10)*Gex(1,WA,ET) + (18697.7601854656)*Gex(1,WA,WA) + gama(1,ET) - (1.05119187072204E-11)*tau(1,ET,ET) - (2434.41215851599)*tau(1,ET,WA) - (11311.5743179694)*tau(1,WA,ET) + (2434.41215851599)*tau(1,WA,WA) =E= 0 ; (LHS = 0)
+     
+Gam(1,WA)..  - (7.105427357601E-15)*x(1,ET) + (8.13512808509168E-31)*x(1,WA) - (3.56881817243384E-31)*Gex(1,ET,ET) + (0)*Gex(1,ET,WA) + (2.1316282072803E-30)*Gex(1,WA,ET) + (2.46519032881566E-32)*Gex(1,WA,WA) + gama(1,WA) + (4.64653213236697E-32)*tau(1,ET,ET) + (0)*tau(1,ET,WA) - (5.55111512312578E-32)*tau(1,WA,ET) - (1)*tau(1,WA,WA) =E= 0 ; (LHS = 0)
+     
+Gam(2,ET)..  (221089.919469868)*x(2,ET) - (3823.528617485)*x(2,WA) + (3712.97339633673)*Gex(2,ET,ET) - (28599.0448914503)*Gex(2,ET,WA) - (17333.930700392)*Gex(2,WA,ET) + (6125.99038717708)*Gex(2,WA,WA) + gama(2,ET) - (541.880202098566)*tau(2,ET,ET) - (801.066188470352)*tau(2,ET,WA) - (3225.63742442107)*tau(2,WA,ET) + (801.066188470352)*tau(2,WA,WA) =E= 0 ; (LHS = 0)
+     
+REMAINING 21 ENTRIES SKIPPED
+
+
+---- Eq  =E=  Equilibrium Equation
+
+Eq(1,ET)..  (1E-16)*P(1) - (1.13115743179694E-12)*Ps(1,ET) - (2530797766.30927)*x(1,ET) + (101030)*y(1,ET) - (2.23735237480506E-11)*gama(1,ET) =E= 0 ; (LHS = -2.53069673630927E-7, INFES = 2.53069673630927E-7 ****)
+     
+Eq(1,WA)..  (1)*P(1) - (1)*Ps(1,WA) - (100899.976483837)*x(1,WA) + (101030)*y(1,WA) - (100899.976483837)*gama(1,WA) =E= 0 ; (LHS = 130.023516162939, INFES = 130.023516162939 ****)
+     
+Eq(2,ET)..  (0.1543)*P(2) - (64.0477996508338)*Ps(2,ET) - (753417441.301239)*x(2,ET) + (101030)*y(2,ET) - (3399.61156703412)*gama(2,ET) =E= 0 ; (LHS = -12792507.5731211, INFES = 12792507.5731211 ****)
+     
+REMAINING 21 ENTRIES SKIPPED
+
+
+---- Res1  =E=  Balance y
+
+Res1(1)..  y(1,ET) + y(1,WA) =E= 1 ; (LHS = 1)
+     
+Res1(2)..  y(2,ET) + y(2,WA) =E= 1 ; (LHS = 1)
+     
+Res1(3)..  y(3,ET) + y(3,WA) =E= 1 ; (LHS = 1)
+     
+REMAINING 9 ENTRIES SKIPPED
+
+
+---- Res2  =E=  Balance x
+
+Res2(1)..  x(1,ET) + x(1,WA) =E= 1 ; (LHS = 1)
+     
+Res2(2)..  x(2,ET) + x(2,WA) =E= 1 ; (LHS = 1)
+     
+Res2(3)..  x(3,ET) + x(3,WA) =E= 1 ; (LHS = 1)
+     
+REMAINING 9 ENTRIES SKIPPED
+
+
+---- Res3  =E=  alpha verification
+
+Res3(ET,WA)..  alpha(ET,WA) - alpha(WA,ET) =E= 0 ; (LHS = 0)
+     
+Res3(WA,ET)..  - alpha(ET,WA) + alpha(WA,ET) =E= 0 ; (LHS = 0)
+     
+
+---- Res4  =E=  alpha 0
+
+Res4(ET,WA)..  alpha(ET,ET) - alpha(ET,WA) =E= 0 ; (LHS = 0)
+     
+Res4(WA,ET)..  - alpha(WA,ET) + alpha(WA,WA) =E= 0 ; (LHS = 0)
+     
+
+---- Res5  =E=  Diagonal
+
+Res5(ET)..  a(ET,ET) =E= 0 ; (LHS = 0)
+     
+Res5(WA)..  a(WA,WA) =E= 0 ; (LHS = 0)
+     
+
+---- Res6  =E=  Diagonal
+
+Res6(ET)..  b(ET,ET) =E= 0 ; (LHS = 0)
+     
+Res6(WA)..  b(WA,WA) =E= 0 ; (LHS = 0)
+     
+
+---- Obje  =E=  Objective function
+
+Obje..  (0)*P(1) + (0)*P(2) + (0)*P(3) + (0)*P(4) + (0)*P(5) + (0)*P(6) + (0)*P(7) + (0)*P(8) + (0)*P(9) + (0)*P(10) + (0)*P(11) + (0)*P(12) + (0)*T(1) + (0)*T(2) + (0)*T(3) + (0)*T(4) + (0)*T(5) + (0)*T(6) + (0)*T(7) + (0)*T(8) + (0)*T(9) + (0)*T(10) + (0)*T(11) + (0)*T(12) + (0)*x(1,ET) + (0)*x(1,WA) + (0)*x(2,ET) + (0)*x(2,WA) + (0)*x(3,ET) + (0)*x(3,WA) + (0)*x(4,ET) + (0)*x(4,WA) + (0)*x(5,ET) + (0)*x(5,WA) + (0)*x(6,ET) + (0)*x(6,WA) + (0)*x(7,ET) + (0)*x(7,WA) + (0)*x(8,ET) + (0)*x(8,WA) + (0)*x(9,ET) + (0)*x(9,WA) + (0)*x(10,ET) + (0)*x(10,WA) + (0)*x(11,ET) + (0)*x(11,WA) + (0)*x(12,ET) + (0)*x(12,WA) + (0)*y(1,ET) + (0)*y(1,WA) + (0)*y(2,ET) + (0)*y(2,WA) + (0)*y(3,ET) + (0)*y(3,WA) + (0)*y(4,ET) + (0)*y(4,WA) + (0)*y(5,ET) + (0)*y(5,WA) + (0)*y(6,ET) + (0)*y(6,WA) + (0)*y(7,ET) + (0)*y(7,WA) + (0)*y(8,ET) + (0)*y(8,WA) + (0)*y(9,ET) + (0)*y(9,WA) + (0)*y(10,ET) + (0)*y(10,WA) + (0)*y(11,ET) + (0)*y(11,WA) + (0)*y(12,ET) + (0)*y(12,WA) + Obj =E= 0 ; (LHS = 0)
+     
+GAMS 44.4.0  06604687 Sep 19, 2023          WEX-WEI x86 64bit/MS Windows - 10/03/23 04:59:11 Page 3
+Optimization of Binary Parameters NRTL
+Column Listing      SOLVE Opti Using NLP From line 183
+
+
+---- P  Presure Model
+
+P(1)
+                (.LO, .L, .UP, .M = 0, 101030, +INF, 0)
+ (1.000000E-16) Eq(1,ET)
+       (1)      Eq(1,WA)
+       (0)      Obje
+
+P(2)
+                (.LO, .L, .UP, .M = 0, 101030, +INF, 0)
+       (0.1543) Eq(2,ET)
+       (0.8457) Eq(2,WA)
+       (0)      Obje
+
+P(3)
+                (.LO, .L, .UP, .M = 0, 101030, +INF, 0)
+       (0.2627) Eq(3,ET)
+       (0.7373) Eq(3,WA)
+       (0)      Obje
+
+REMAINING 9 ENTRIES SKIPPED
+
+---- T  Temperature of Model
+
+T(1)
+                (.LO, .L, .UP, .M = 0, 373.05, +INF, 0)
+      (-0.0342) Ant(1,ET)
+      (-0.0357) Ant(1,WA)
+       (0)      taue(1,ET,ET)
+       (0.0072) taue(1,ET,WA)
+       (0.0072) taue(1,WA,ET)
+       (0)      taue(1,WA,WA)
+       (0)      Obje
+
+T(2)
+                (.LO, .L, .UP, .M = 0, 369.8, +INF, 0)
+      (-0.0349) Ant(2,ET)
+      (-0.0364) Ant(2,WA)
+       (0)      taue(2,ET,ET)
+       (0.0073) taue(2,ET,WA)
+       (0.0073) taue(2,WA,ET)
+       (0)      taue(2,WA,WA)
+       (0)      Obje
+
+T(3)
+                (.LO, .L, .UP, .M = 0, 366.62, +INF, 0)
+      (-0.0356) Ant(3,ET)
+      (-0.0371) Ant(3,WA)
+       (0)      taue(3,ET,ET)
+       (0.0074) taue(3,ET,WA)
+       (0.0074) taue(3,WA,ET)
+       (0)      taue(3,WA,WA)
+       (0)      Obje
+
+REMAINING 9 ENTRIES SKIPPED
+
+---- Ps  Saturation Presure of i
+
+Ps(1,ET)
+                (.LO, .L, .UP, .M = 0, 223735.237480506, +INF, 0)
+ (4.4695686E-6) Ant(1,ET)
+ (-1.13116E-12) Eq(1,ET)
+
+Ps(1,WA)
+                (.LO, .L, .UP, .M = 0, 100899.976483837, +INF, 0)
+ (9.9108051E-6) Ant(1,WA)
+      (-1)      Eq(1,WA)
+
+Ps(2,ET)
+                (.LO, .L, .UP, .M = 0, 199977.151002007, +INF, 0)
+ (5.0005713E-6) Ant(2,ET)
+     (-64.0478) Eq(2,ET)
+
+REMAINING 21 ENTRIES SKIPPED
+
+---- x  Liquid fraction of component i
+
+x(1,ET)
+                (.LO, .L, .UP, .M = 0, 1E-16, +INF, 0)
+  (815427.0891) Gam(1,ET)
+ (-7.10543E-15) Gam(1,WA)
+ (-2.530798E+9) Eq(1,ET)
+        1       Res2(1)
+       (0)      Obje
+
+x(1,WA)
+                (.LO, .L, .UP, .M = 0, 1, +INF, 0)
+ (-9.10048E-11) Gam(1,ET)
+ (8.135128E-31) Gam(1,WA)
+ (-100899.9765) Eq(1,WA)
+        1       Res2(1)
+       (0)      Obje
+
+x(2,ET)
+                (.LO, .L, .UP, .M = 0, 0.017, +INF, 0)
+  (221089.9195) Gam(2,ET)
+      (-1.0244) Gam(2,WA)
+ (-7.534174E+8) Eq(2,ET)
+        1       Res2(2)
+       (0)      Obje
+
+REMAINING 21 ENTRIES SKIPPED
+
+---- y  Vapor fraction of component i
+
+y(1,ET)
+                (.LO, .L, .UP, .M = 0, 1E-16, +INF, 0)
+  (101030)      Eq(1,ET)
+        1       Res1(1)
+       (0)      Obje
+
+y(1,WA)
+                (.LO, .L, .UP, .M = 0, 1, +INF, 0)
+  (101030)      Eq(1,WA)
+        1       Res1(1)
+       (0)      Obje
+
+y(2,ET)
+                (.LO, .L, .UP, .M = 0, 0.1543, +INF, 0)
+  (101030)      Eq(2,ET)
+        1       Res1(2)
+       (0)      Obje
+
+REMAINING 21 ENTRIES SKIPPED
+
+---- alpha  Binary interaction alpha
+
+alpha(ET,ET)
+                (.LO, .L, .UP, .M = 0.2, 0.2, 0.426, 0)
+       (0)      Gexe(1,ET,ET)
+       (0)      Gexe(2,ET,ET)
+       (0)      Gexe(3,ET,ET)
+       (0)      Gexe(4,ET,ET)
+       (0)      Gexe(5,ET,ET)
+       (0)      Gexe(6,ET,ET)
+       (0)      Gexe(7,ET,ET)
+       (0)      Gexe(8,ET,ET)
+       (0)      Gexe(9,ET,ET)
+       (0)      Gexe(10,ET,ET)
+       (0)      Gexe(11,ET,ET)
+       (0)      Gexe(12,ET,ET)
+        1       Res4(ET,WA)
+
+alpha(ET,WA)
+                (.LO, .L, .UP, .M = 0.2, 0.2, 0.426, 0)
+       (1.653)  Gexe(1,ET,WA)
+       (1.6503) Gexe(2,ET,WA)
+       (1.6475) Gexe(3,ET,WA)
+       (1.6456) Gexe(4,ET,WA)
+       (1.6435) Gexe(5,ET,WA)
+       (1.6413) Gexe(6,ET,WA)
+       (1.6399) Gexe(7,ET,WA)
+       (1.6379) Gexe(8,ET,WA)
+       (1.6361) Gexe(9,ET,WA)
+       (1.6354) Gexe(10,ET,WA)
+       (1.6347) Gexe(11,ET,WA)
+       (1.6336) Gexe(12,ET,WA)
+        1       Res3(ET,WA)
+       -1       Res3(WA,ET)
+       -1       Res4(ET,WA)
+
+alpha(WA,ET)
+                (.LO, .L, .UP, .M = 0.2, 0.2, 0.426, 0)
+       (1.653)  Gexe(1,WA,ET)
+       (1.6503) Gexe(2,WA,ET)
+       (1.6475) Gexe(3,WA,ET)
+       (1.6456) Gexe(4,WA,ET)
+       (1.6435) Gexe(5,WA,ET)
+       (1.6413) Gexe(6,WA,ET)
+       (1.6399) Gexe(7,WA,ET)
+       (1.6379) Gexe(8,WA,ET)
+       (1.6361) Gexe(9,WA,ET)
+       (1.6354) Gexe(10,WA,ET)
+       (1.6347) Gexe(11,WA,ET)
+       (1.6336) Gexe(12,WA,ET)
+       -1       Res3(ET,WA)
+        1       Res3(WA,ET)
+       -1       Res4(WA,ET)
+
+REMAINING ENTRY SKIPPED
+
+---- Gex  G variable of NRTL
+
+Gex(1,ET,ET)
+                (.LO, .L, .UP, .M = 0, 1, +INF, 0)
+        1       Gexe(1,ET,ET)
+ (8.073790E-11) Gam(1,ET)
+ (-3.56882E-31) Gam(1,WA)
+
+Gex(1,ET,WA)
+                (.LO, .L, .UP, .M = 0, 0.215214265502258, +INF, 0)
+        1       Gexe(1,ET,WA)
+  (-86879.7435) Gam(1,ET)
+       (0)      Gam(1,WA)
+
+Gex(1,WA,ET)
+                (.LO, .L, .UP, .M = 0, 0.215214265502258, +INF, 0)
+        1       Gexe(1,WA,ET)
+ (-4.28696E-10) Gam(1,ET)
+ (2.131628E-30) Gam(1,WA)
+
+REMAINING 45 ENTRIES SKIPPED
+
+---- gama  Gamma variable of NRTL (activity)
+
+gama(1,ET)
+                (.LO, .L, .UP, .M = 0, 11311.5743179694, +INF, 0)
+        1       Gam(1,ET)
+ (-2.23735E-11) Eq(1,ET)
+
+gama(1,WA)
+                (.LO, .L, .UP, .M = 0, 1, +INF, 0)
+        1       Gam(1,WA)
+ (-100899.9765) Eq(1,WA)
+
+gama(2,ET)
+                (.LO, .L, .UP, .M = 0, 3767.51762651963, +INF, 0)
+        1       Gam(2,ET)
+   (-3399.6116) Eq(2,ET)
+
+REMAINING 21 ENTRIES SKIPPED
+
+---- tau  Tau variable of NRTL
+
+tau(1,ET,ET)
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       taue(1,ET,ET)
+       (0.2)    Gexe(1,ET,ET)
+ (-1.05119E-11) Gam(1,ET)
+ (4.646532E-32) Gam(1,WA)
+
+tau(1,ET,WA)
+                (.LO, .L, .UP, .M = -INF, 7.68060581691462, +INF, 0)
+        1       taue(1,ET,WA)
+       (0.043)  Gexe(1,ET,WA)
+   (-2434.4122) Gam(1,ET)
+       (0)      Gam(1,WA)
+
+tau(1,WA,ET)
+                (.LO, .L, .UP, .M = -INF, 7.68060581691462, +INF, 0)
+        1       taue(1,WA,ET)
+       (0.043)  Gexe(1,WA,ET)
+  (-11311.5743) Gam(1,ET)
+ (-5.55112E-32) Gam(1,WA)
+
+REMAINING 45 ENTRIES SKIPPED
+
+---- a  Binary interaction Parameter a
+
+a(ET,ET)
+                (.LO, .L, .UP, .M = -10, 0, 10, 0)
+       -1       taue(1,ET,ET)
+       -1       taue(2,ET,ET)
+       -1       taue(3,ET,ET)
+       -1       taue(4,ET,ET)
+       -1       taue(5,ET,ET)
+       -1       taue(6,ET,ET)
+       -1       taue(7,ET,ET)
+       -1       taue(8,ET,ET)
+       -1       taue(9,ET,ET)
+       -1       taue(10,ET,ET)
+       -1       taue(11,ET,ET)
+       -1       taue(12,ET,ET)
+        1       Res5(ET)
+
+a(ET,WA)
+                (.LO, .L, .UP, .M = -10, 5, 10, 0)
+       -1       taue(1,ET,WA)
+       -1       taue(2,ET,WA)
+       -1       taue(3,ET,WA)
+       -1       taue(4,ET,WA)
+       -1       taue(5,ET,WA)
+       -1       taue(6,ET,WA)
+       -1       taue(7,ET,WA)
+       -1       taue(8,ET,WA)
+       -1       taue(9,ET,WA)
+       -1       taue(10,ET,WA)
+       -1       taue(11,ET,WA)
+       -1       taue(12,ET,WA)
+
+a(WA,ET)
+                (.LO, .L, .UP, .M = -10, 5, 10, 0)
+       -1       taue(1,WA,ET)
+       -1       taue(2,WA,ET)
+       -1       taue(3,WA,ET)
+       -1       taue(4,WA,ET)
+       -1       taue(5,WA,ET)
+       -1       taue(6,WA,ET)
+       -1       taue(7,WA,ET)
+       -1       taue(8,WA,ET)
+       -1       taue(9,WA,ET)
+       -1       taue(10,WA,ET)
+       -1       taue(11,WA,ET)
+       -1       taue(12,WA,ET)
+
+REMAINING ENTRY SKIPPED
+
+---- b  Binary interaction Parameter b
+
+b(ET,ET)
+                (.LO, .L, .UP, .M = -2500, 0, 2500, 0)
+      (-0.0027) taue(1,ET,ET)
+      (-0.0027) taue(2,ET,ET)
+      (-0.0027) taue(3,ET,ET)
+      (-0.0027) taue(4,ET,ET)
+      (-0.0028) taue(5,ET,ET)
+      (-0.0028) taue(6,ET,ET)
+      (-0.0028) taue(7,ET,ET)
+      (-0.0028) taue(8,ET,ET)
+      (-0.0028) taue(9,ET,ET)
+      (-0.0028) taue(10,ET,ET)
+      (-0.0028) taue(11,ET,ET)
+      (-0.0028) taue(12,ET,ET)
+        1       Res6(ET)
+
+b(ET,WA)
+                (.LO, .L, .UP, .M = -2500, 1000, 2500, 0)
+      (-0.0027) taue(1,ET,WA)
+      (-0.0027) taue(2,ET,WA)
+      (-0.0027) taue(3,ET,WA)
+      (-0.0027) taue(4,ET,WA)
+      (-0.0028) taue(5,ET,WA)
+      (-0.0028) taue(6,ET,WA)
+      (-0.0028) taue(7,ET,WA)
+      (-0.0028) taue(8,ET,WA)
+      (-0.0028) taue(9,ET,WA)
+      (-0.0028) taue(10,ET,WA)
+      (-0.0028) taue(11,ET,WA)
+      (-0.0028) taue(12,ET,WA)
+
+b(WA,ET)
+                (.LO, .L, .UP, .M = -2500, 1000, 2500, 0)
+      (-0.0027) taue(1,WA,ET)
+      (-0.0027) taue(2,WA,ET)
+      (-0.0027) taue(3,WA,ET)
+      (-0.0027) taue(4,WA,ET)
+      (-0.0028) taue(5,WA,ET)
+      (-0.0028) taue(6,WA,ET)
+      (-0.0028) taue(7,WA,ET)
+      (-0.0028) taue(8,WA,ET)
+      (-0.0028) taue(9,WA,ET)
+      (-0.0028) taue(10,WA,ET)
+      (-0.0028) taue(11,WA,ET)
+      (-0.0028) taue(12,WA,ET)
+
+REMAINING ENTRY SKIPPED
+
+---- Obj  Objective of optimization
+
+Obj
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       Obje
+
+GAMS 44.4.0  06604687 Sep 19, 2023          WEX-WEI x86 64bit/MS Windows - 10/03/23 04:59:11 Page 4
+Optimization of Binary Parameters NRTL
+Range Statistics    SOLVE Opti Using NLP From line 183
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 7.365E+01] - Zero values observed as well
+Bound     [min, max] : [ 2.000E-01, 2.500E+03] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E-16, 2.531E+09] - Zero values observed as well
+
+GAMS 44.4.0  06604687 Sep 19, 2023          WEX-WEI x86 64bit/MS Windows - 10/03/23 04:59:11 Page 5
+Optimization of Binary Parameters NRTL
+Model Statistics    SOLVE Opti Using NLP From line 183
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          12     SINGLE EQUATIONS          201
+BLOCKS OF VARIABLES          12     SINGLE VARIABLES          229
+NON ZERO ELEMENTS           901     NON LINEAR N-Z            672
+CODE LENGTH               3,075     CONSTANT POOL              77
+
+
+GENERATION TIME      =        0.016 SECONDS      4 MB  44.4.0 06604687 WEX-WEI
+GAMS 44.4.0  06604687 Sep 19, 2023          WEX-WEI x86 64bit/MS Windows - 10/03/23 04:59:11 Page 6
+Optimization of Binary Parameters NRTL
+Solution Report     SOLVE Opti Using NLP From line 183
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   Opti                OBJECTIVE  Obj
+     TYPE    NLP                 DIRECTION  MINIMIZE
+     SOLVER  CONOPT              FROM LINE  183
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      2 Locally Optimal
+**** OBJECTIVE VALUE                0.2449
+
+ RESOURCE USAGE, LIMIT          5.672 10000000000.000
+ ITERATION COUNT, LIMIT     16365    2147483647
+ EVALUATION ERRORS              0             0
+--- *** This solver runs with a community license. No commercial use.
+ 
+ 
+    C O N O P T 3   version 3.17O
+    Copyright (C)   ARKI Consulting and Development A/S
+                    Bagsvaerdvej 246 A
+                    DK-2880 Bagsvaerd, Denmark
+ 
+ 
+    The model has 229 variables and 201 constraints
+    with 901 Jacobian elements, 672 of which are nonlinear.
+    The Hessian of the Lagrangian has 196 elements on the diagonal,
+    732 elements below the diagonal, and 224 nonlinear variables.
+ 
+ ** Warning **  The value of LFITER is out of range.
+                LFITER is decreased from 2147483647 to 1000000000.
+ 
+ ** Warning **  The variance of the derivatives in the initial
+                point is large (= 5.3 ). A better initial
+                point, a better scaling, or better bounds on the
+                variables will probably help the optimization.
+ 
+ 
+                   Pre-triangular equations:   4
+                   Post-triangular equations:  1
+                   Definitional equations:     122
+ 
+ 
+ ** Optimal solution. Reduced gradient less than tolerance.
+    Tolerance is relaxed due to large 2nd derivatives.
+ 
+ 
+ CONOPT time Total                            5.672 seconds
+   of which: Function evaluations             2.324 = 41.0%
+             1st Derivative evaluations       0.527 =  9.3%
+             2nd Derivative evaluations       0.226 =  4.0%
+             Directional 2nd Derivative       1.305 = 23.0%
+ 
+
+---- EQU Ant  Antoine equation
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+1 .ET        73.3040        73.3040        73.3040   2.7759114E-6      
+1 .WA        73.6490        73.6490        73.6490        -0.0051      
+2 .ET        73.3040        73.3040        73.3040         0.0156      
+2 .WA        73.6490        73.6490        73.6490         0.3631      
+3 .ET        73.3040        73.3040        73.3040         0.0008      
+3 .WA        73.6490        73.6490        73.6490         0.2025      
+4 .ET        73.3040        73.3040        73.3040         0.0001      
+4 .WA        73.6490        73.6490        73.6490         0.1005      
+5 .ET        73.3040        73.3040        73.3040         0.0001      
+5 .WA        73.6490        73.6490        73.6490         0.1304      
+6 .ET        73.3040        73.3040        73.3040        -0.0001      
+6 .WA        73.6490        73.6490        73.6490         0.1300      
+7 .ET        73.3040        73.3040        73.3040        -0.0002      
+7 .WA        73.6490        73.6490        73.6490         0.1349      
+8 .ET        73.3040        73.3040        73.3040        -0.3261      
+8 .WA        73.6490        73.6490        73.6490        -0.3098      
+9 .ET        73.3040        73.3040        73.3040        -0.2083      
+9 .WA        73.6490        73.6490        73.6490        -0.2000      
+10.ET        73.3040        73.3040        73.3040         0.0687      
+10.WA        73.6490        73.6490        73.6490        -0.0493      
+11.ET        73.3040        73.3040        73.3040         0.5361      
+11.WA        73.6490        73.6490        73.6490         0.1719      
+12.ET        73.3040        73.3040        73.3040        -0.0010      
+12.WA        73.6490        73.6490        73.6490         EPS         
+
+---- EQU taue  Tau equation of NRTL
+
+                LOWER          LEVEL          UPPER         MARGINAL
+
+1 .ET.ET          .              .              .             EPS         
+1 .ET.WA          .              .              .             EPS         
+1 .WA.ET          .              .              .             EPS         
+1 .WA.WA          .              .              .            -0.0051      
+2 .ET.ET          .              .              .             0.0233      
+2 .ET.WA          .              .              .            -0.0020      
+2 .WA.ET          .              .              .            -0.0077      
+2 .WA.WA          .              .              .             0.3650      
+3 .ET.ET          .              .              .             0.0016      
+3 .ET.WA          .              .              .            -0.0001      
+3 .WA.ET          .              .              .            -0.0007      
+3 .WA.WA          .              .              .             0.2026      
+4 .ET.ET          .              .              .       2.2437923E-5      
+4 .ET.WA          .              .              .       -7.654891E-6      
+4 .WA.ET          .              .              .       3.8143510E-5      
+4 .WA.WA          .              .              .             0.1005      
+5 .ET.ET          .              .              .             0.0001      
+5 .ET.WA          .              .              .       -1.301842E-5      
+5 .WA.ET          .              .              .       4.4233658E-5      
+5 .WA.WA          .              .              .             0.1305      
+6 .ET.ET          .              .              .            -0.0004      
+6 .ET.WA          .              .              .       1.2971820E-5      
+6 .WA.ET          .              .              .             0.0003      
+6 .WA.WA          .              .              .             0.1300      
+7 .ET.ET          .              .              .            -0.0007      
+7 .ET.WA          .              .              .       2.7923878E-5      
+7 .WA.ET          .              .              .             0.0005      
+7 .WA.WA          .              .              .             0.1349      
+8 .ET.ET          .              .              .            -0.3320      
+8 .ET.WA          .              .              .             0.0339      
+8 .WA.ET          .              .              .             0.0059      
+8 .WA.WA          .              .              .            -0.3437      
+9 .ET.ET          .              .              .            -0.2121      
+9 .ET.WA          .              .              .             0.0210      
+9 .WA.ET          .              .              .             0.0038      
+9 .WA.WA          .              .              .            -0.2210      
+10.ET.ET          .              .              .             0.0678      
+10.ET.WA          .              .              .            -0.0054      
+10.WA.ET          .              .              .             0.0009      
+10.WA.WA          .              .              .            -0.0440      
+11.ET.ET          .              .              .             0.5394      
+11.ET.WA          .              .              .            -0.0474      
+11.WA.ET          .              .              .            -0.0033      
+11.WA.WA          .              .              .             0.2193      
+12.ET.ET          .              .              .            -0.0010      
+12.ET.WA          .              .              .             EPS         
+12.WA.ET          .              .              .             EPS         
+12.WA.WA          .              .              .             EPS         
+
+---- EQU Gexe  G equation of NRTL
+
+                LOWER          LEVEL          UPPER         MARGINAL
+
+1 .ET.ET          .              .              .             EPS         
+1 .ET.WA          .              .              .             EPS         
+1 .WA.ET          .              .              .             EPS         
+1 .WA.WA          .              .              .             EPS         
+2 .ET.ET          .              .              .            -0.0221      
+2 .ET.WA          .              .              .             0.0873      
+2 .WA.ET          .              .              .             4.9571      
+2 .WA.WA          .              .              .            -0.0080      
+3 .ET.ET          .              .              .            -0.0027      
+3 .ET.WA          .              .              .             0.0047      
+3 .WA.ET          .              .              .             0.6151      
+3 .WA.WA          .              .              .            -0.0004      
+4 .ET.ET          .              .              .            -0.0002      
+4 .ET.WA          .              .              .             0.0003      
+4 .WA.ET          .              .              .             0.0482      
+4 .WA.WA          .              .              .       -3.042742E-5      
+5 .ET.ET          .              .              .            -0.0003      
+5 .ET.WA          .              .              .             0.0006      
+5 .WA.ET          .              .              .             0.0605      
+5 .WA.WA          .              .              .            -0.0001      
+6 .ET.ET          .              .              .             0.0005      
+6 .ET.WA          .              .              .            -0.0006      
+6 .WA.ET          .              .              .            -0.1204      
+6 .WA.WA          .              .              .             0.0001      
+7 .ET.ET          .              .              .             0.0010      
+7 .ET.WA          .              .              .            -0.0013      
+7 .WA.ET          .              .              .            -0.2320      
+7 .WA.WA          .              .              .             0.0001      
+8 .ET.ET          .              .              .             0.0169      
+8 .ET.WA          .              .              .            -1.6942      
+8 .WA.ET          .              .              .            -3.9702      
+8 .WA.WA          .              .              .             0.1382      
+9 .ET.ET          .              .              .             0.0108      
+9 .ET.WA          .              .              .            -1.0682      
+9 .WA.ET          .              .              .            -2.5501      
+9 .WA.WA          .              .              .             0.0857      
+10.ET.ET          .              .              .             0.0026      
+10.ET.WA          .              .              .             0.2964      
+10.WA.ET          .              .              .            -0.6072      
+10.WA.WA          .              .              .            -0.0236      
+11.ET.ET          .              .              .            -0.0094      
+11.ET.WA          .              .              .             2.5259      
+11.WA.ET          .              .              .             2.2385      
+11.WA.WA          .              .              .            -0.2000      
+12.ET.ET          .              .              .             EPS         
+12.ET.WA          .              .              .             EPS         
+12.WA.ET          .              .              .             EPS         
+12.WA.WA          .              .              .             EPS         
+
+---- EQU Gam  Gamma Equation of NRTL
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+1 .ET          .              .              .             EPS         
+1 .WA          .              .              .            -0.0051      
+2 .ET          .              .              .             0.0050      
+2 .WA          .              .              .             0.3508      
+3 .ET          .              .              .       4.0269796E-5      
+3 .WA          .              .              .             0.1990      
+4 .ET          .              .              .       1.6674689E-6      
+4 .WA          .              .              .             0.0991      
+5 .ET          .              .              .       1.8562168E-6      
+5 .WA          .              .              .             0.1288      
+6 .ET          .              .              .       -1.286551E-6      
+6 .WA          .              .              .             0.1286      
+7 .ET          .              .              .       -2.239866E-6      
+7 .WA          .              .              .             0.1336      
+8 .ET          .              .              .            -0.2094      
+8 .WA          .              .              .            -0.2908      
+9 .ET          .              .              .            -0.1359      
+9 .WA          .              .              .            -0.1865      
+10.ET          .              .              .             0.0451      
+10.WA          .              .              .            -0.0458      
+11.ET          .              .              .             0.3551      
+11.WA          .              .              .             0.1588      
+12.ET          .              .              .            -0.0010      
+12.WA          .              .              .             EPS         
+
+---- EQU Eq  Equilibrium Equation
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+1 .ET          .              .              .             EPS         
+1 .WA          .              .              .       -5.085146E-8      
+2 .ET          .              .              .       1.6251511E-6      
+2 .WA          .              .              .       3.9711595E-6      
+3 .ET          .              .              .       4.1186322E-8      
+3 .WA          .              .              .       2.5066148E-6      
+4 .ET          .              .              .       2.2492756E-9      
+4 .WA          .              .              .       1.3566342E-6      
+5 .ET          .              .              .       3.1319585E-9      
+5 .WA          .              .              .       1.9227547E-6      
+6 .ET          .              .              .       -2.683965E-9      
+6 .WA          .              .              .       2.1063536E-6      
+7 .ET          .              .              .       -5.248726E-9      
+7 .WA          .              .              .       2.3255755E-6      
+8 .ET          .              .              .       -5.112481E-6      
+8 .WA          .              .              .       -8.317671E-6      
+9 .ET          .              .              .       -2.975469E-6      
+9 .WA          .              .              .       -6.447650E-6      
+10.ET          .              .              .       9.5207827E-7      
+10.WA          .              .              .       -1.711018E-6      
+11.ET          .              .              .       7.1860359E-6      
+11.WA          .              .              .       6.5050030E-6      
+12.ET          .              .              .       -9.875477E-9      
+12.WA          .              .              .             EPS         
+
+---- EQU Res1  Balance y
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+1          1.0000         1.0000         1.0000         0.0026      
+2          1.0000         1.0000         1.0000        -0.2827      
+3          1.0000         1.0000         1.0000        -0.1287      
+4          1.0000         1.0000         1.0000        -0.0686      
+5          1.0000         1.0000         1.0000        -0.0973      
+6          1.0000         1.0000         1.0000        -0.1063      
+7          1.0000         1.0000         1.0000        -0.1172      
+8          1.0000         1.0000         1.0000         0.6784      
+9          1.0000         1.0000         1.0000         0.4760      
+10         1.0000         1.0000         1.0000         0.0383      
+11         1.0000         1.0000         1.0000        -0.6916      
+12         1.0000         1.0000         1.0000         0.0005      
+
+---- EQU Res2  Balance x
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+1          1.0000         1.0000         1.0000        -0.0051      
+2          1.0000         1.0000         1.0000         0.3818      
+3          1.0000         1.0000         1.0000         0.2493      
+4          1.0000         1.0000         1.0000         0.1939      
+5          1.0000         1.0000         1.0000         0.2528      
+6          1.0000         1.0000         1.0000         0.3299      
+7          1.0000         1.0000         1.0000         0.3975      
+8          1.0000         1.0000         1.0000        -0.7099      
+9          1.0000         1.0000         1.0000        -0.4227      
+10         1.0000         1.0000         1.0000         0.0336      
+11         1.0000         1.0000         1.0000         0.7305      
+12         1.0000         1.0000         1.0000        -0.0010      
+
+---- EQU Res3  alpha verification
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+ET.WA          .              .              .            -0.0571      
+WA.ET          .              .              .              .          
+
+---- EQU Res4  alpha 0
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+ET.WA          .              .              .             EPS         
+WA.ET          .              .              .             EPS         
+
+---- EQU Res5  Diagonal
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+ET          .              .              .             0.0860      
+WA          .              .              .             0.6691      
+
+---- EQU Res6  Diagonal
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+ET          .              .              .             0.0003      
+WA          .              .              .             0.0018      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU Obje                .              .              .             1.0000      
+
+  Obje  Objective function
+
+---- VAR P  Presure Model
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+1           .        101030.0000        +INF             .          
+2           .        101030.0000        +INF      1.349321E-11      
+3           .        101030.0000        +INF      1.341132E-12      
+4           .        101030.0000        +INF      -1.18350E-11      
+5           .        101030.0000        +INF      -6.86209E-12      
+6           .        101030.0000        +INF             .          
+7           .        101030.0000        +INF             .          
+8           .        101030.0000        +INF      5.153850E-12      
+9           .        101030.0000        +INF      -1.38348E-11      
+10          .        101030.0000        +INF      7.388777E-12      
+11          .        101030.0000        +INF      3.742582E-12      
+12          .        101030.0000        +INF      6.842259E-12      
+
+---- VAR T  Temperature of Model
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+1           .           373.0501        +INF             .          
+2           .           369.7931        +INF             .          
+3           .           366.6162        +INF             .          
+4           .           364.3581        +INF             .          
+5           .           362.0675        +INF             .          
+6           .           359.6375        +INF             .          
+7           .           358.0674        +INF             .          
+8           .           355.9327        +INF             .          
+9           .           353.9583        +INF             .          
+10          .           353.2396        +INF             .          
+11          .           352.4355        +INF             .          
+12          .           351.3800        +INF             .          
+
+---- VAR Ps  Saturation Presure of i
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+1 .ET          .        223735.9373        +INF      -1.24071E-11      
+1 .WA          .        100900.3059        +INF             .          
+2 .ET          .        199928.8036        +INF             .          
+2 .WA          .         89723.8612        +INF             .          
+3 .ET          .        178741.3269        +INF             .          
+3 .WA          .         79832.2642        +INF             .          
+4 .ET          .        164828.5247        +INF             .          
+4 .WA          .         73367.4369        +INF             .          
+5 .ET          .        151635.8633        +INF             .          
+5 .WA          .         67261.2464        +INF             .          
+6 .ET          .        138601.6641        +INF             .          
+6 .WA          .         61252.9229        +INF      -2.93153E-11      
+7 .ET          .        130681.4741        +INF      2.164880E-11      
+7 .WA          .         57614.6391        +INF             .          
+8 .ET          .        120515.8243        +INF            EPS         
+8 .WA          .         52959.7556        +INF             .          
+9 .ET          .        111703.3162        +INF            EPS         
+9 .WA          .         48938.8194        +INF             .          
+10.ET          .        108631.1610        +INF            EPS         
+10.WA          .         47540.3577        +INF             .          
+11.ET          .        105277.1799        +INF            EPS         
+11.WA          .         46015.6204        +INF             .          
+12.ET          .        101005.0780        +INF             .          
+12.WA          .         44076.6260        +INF             .          
+
+---- VAR x  Liquid fraction of component i
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+1 .ET          .       1.0717806E-9        +INF             .          
+1 .WA          .             1.0000        +INF             .          
+2 .ET          .             0.0154        +INF             .          
+2 .WA          .             0.9846        +INF             .          
+3 .ET          .             0.0055        +INF             .          
+3 .WA          .             0.9945        +INF             .          
+4 .ET          .             0.0045        +INF             .          
+4 .WA          .             0.9955        +INF             .          
+5 .ET          .             0.0039        +INF             .          
+5 .WA          .             0.9961        +INF             .          
+6 .ET          .             0.0035        +INF             .          
+6 .WA          .             0.9965        +INF             .          
+7 .ET          .             0.0033        +INF             .          
+7 .WA          .             0.9967        +INF             .          
+8 .ET          .             0.3399        +INF             .          
+8 .WA          .             0.6601        +INF             .          
+9 .ET          .             0.4089        +INF             .          
+9 .WA          .             0.5911        +INF             .          
+10.ET          .             0.4365        +INF             .          
+10.WA          .             0.5635        +INF             .          
+11.ET          .             0.4693        +INF             .          
+11.WA          .             0.5307        +INF             .          
+12.ET          .             1.0000        +INF             .          
+12.WA          .       1.3703359E-6        +INF      -2.120957E-6      
+
+---- VAR y  Vapor fraction of component i
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+1 .ET          .             0.0013        +INF      -2.641974E-6      
+1 .WA          .             0.9987        +INF             .          
+2 .ET          .             0.0950        +INF             .          
+2 .WA          .             0.9050        +INF             .          
+3 .ET          .             0.2004        +INF             .          
+3 .WA          .             0.7996        +INF             .          
+4 .ET          .             0.2666        +INF             .          
+4 .WA          .             0.7334        +INF             .          
+5 .ET          .             0.3285        +INF             .          
+5 .WA          .             0.6715        +INF             .          
+6 .ET          .             0.3891        +INF             .          
+6 .WA          .             0.6109        +INF             .          
+7 .ET          .             0.4257        +INF             .          
+7 .WA          .             0.5743        +INF             .          
+8 .ET          .             0.6314        +INF             .          
+8 .WA          .             0.3686        +INF             .          
+9 .ET          .             0.6929        +INF             .          
+9 .WA          .             0.3071        +INF             .          
+10.ET          .             0.7146        +INF             .          
+10.WA          .             0.2854        +INF             .          
+11.ET          .             0.7384        +INF             .          
+11.WA          .             0.2616        +INF             .          
+12.ET          .             0.9998        +INF             .          
+12.WA          .             0.0002        +INF             .          
+
+---- VAR alpha  Binary interaction alpha
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+ET.ET         0.2000         0.4260         0.4260          .          
+ET.WA         0.2000         0.4260         0.4260          .          
+WA.ET         0.2000         0.4260         0.4260        -0.0920      
+WA.WA         0.2000         0.4260         0.4260          .          
+
+---- VAR Gex  G variable of NRTL
+
+                LOWER          LEVEL          UPPER         MARGINAL
+
+1 .ET.ET          .             1.0000        +INF             .          
+1 .ET.WA          .             0.0936        +INF             .          
+1 .WA.ET          .             0.0045        +INF             .          
+1 .WA.WA          .             1.0000        +INF             .          
+2 .ET.ET          .             1.0000        +INF             .          
+2 .ET.WA          .             0.0913        +INF             .          
+2 .WA.ET          .             0.0045        +INF             .          
+2 .WA.WA          .             1.0000        +INF             .          
+3 .ET.ET          .             1.0000        +INF             .          
+3 .ET.WA          .             0.0890        +INF             .          
+3 .WA.ET          .             0.0044        +INF             .          
+3 .WA.WA          .             1.0000        +INF             .          
+4 .ET.ET          .             1.0000        +INF             .          
+4 .ET.WA          .             0.0874        +INF             .          
+4 .WA.ET          .             0.0044        +INF             .          
+4 .WA.WA          .             1.0000        +INF             .          
+5 .ET.ET          .             1.0000        +INF             .          
+5 .ET.WA          .             0.0858        +INF             .          
+5 .WA.ET          .             0.0044        +INF             .          
+5 .WA.WA          .             1.0000        +INF             .          
+6 .ET.ET          .             1.0000        +INF             .          
+6 .ET.WA          .             0.0841        +INF             .          
+6 .WA.ET          .             0.0043        +INF             .          
+6 .WA.WA          .             1.0000        +INF             .          
+7 .ET.ET          .             1.0000        +INF             .          
+7 .ET.WA          .             0.0830        +INF             .          
+7 .WA.ET          .             0.0043        +INF             .          
+7 .WA.WA          .             1.0000        +INF             .          
+8 .ET.ET          .             1.0000        +INF             .          
+8 .ET.WA          .             0.0816        +INF             .          
+8 .WA.ET          .             0.0043        +INF             .          
+8 .WA.WA          .             1.0000        +INF             .          
+9 .ET.ET          .             1.0000        +INF             .          
+9 .ET.WA          .             0.0802        +INF             .          
+9 .WA.ET          .             0.0042        +INF             .          
+9 .WA.WA          .             1.0000        +INF             .          
+10.ET.ET          .             1.0000        +INF             .          
+10.ET.WA          .             0.0797        +INF             .          
+10.WA.ET          .             0.0042        +INF             .          
+10.WA.WA          .             1.0000        +INF             .          
+11.ET.ET          .             1.0000        +INF             .          
+11.ET.WA          .             0.0792        +INF             .          
+11.WA.ET          .             0.0042        +INF             .          
+11.WA.WA          .             1.0000        +INF             .          
+12.ET.ET          .             1.0000        +INF             .          
+12.ET.WA          .             0.0785        +INF             .          
+12.WA.ET          .             0.0042        +INF             .          
+12.WA.WA          .             1.0000        +INF             .          
+
+---- VAR gama  Gamma variable of NRTL (activity)
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+1 .ET          .        540852.5013        +INF      -2.89696E-13      
+1 .WA          .             1.0000        +INF             .          
+2 .ET          .             3.1170        +INF            EPS         
+2 .WA          .             1.0349        +INF             .          
+3 .ET          .            20.7103        +INF            EPS         
+3 .WA          .             1.0174        +INF             .          
+4 .ET          .            36.3314        +INF            EPS         
+4 .WA          .             1.0145        +INF             .          
+5 .ET          .            56.0006        +INF            EPS         
+5 .WA          .             1.0126        +INF             .          
+6 .ET          .            81.6362        +INF      -5.978426E-9      
+6 .WA          .             1.0111        +INF             .          
+7 .ET          .           101.1533        +INF      8.0544462E-9      
+7 .WA          .             1.0103        +INF             .          
+8 .ET          .             1.5572        +INF             .          
+8 .WA          .             1.0654        +INF             .          
+9 .ET          .             1.5325        +INF             .          
+9 .WA          .             1.0726        +INF             .          
+10.ET          .             1.5223        +INF             .          
+10.WA          .             1.0765        +INF             .          
+11.ET          .             1.5098        +INF             .          
+11.WA          .             1.0823        +INF             .          
+12.ET          .             1.0000        +INF             .          
+12.WA          .           414.9088        +INF            EPS         
+
+---- VAR tau  Tau variable of NRTL
+
+                LOWER          LEVEL          UPPER         MARGINAL
+
+1 .ET.ET        -INF             .            +INF             .          
+1 .ET.WA        -INF            5.5610        +INF             .          
+1 .WA.ET        -INF           12.6805        +INF             .          
+1 .WA.WA        -INF             .            +INF             .          
+2 .ET.ET        -INF             .            +INF             .          
+2 .ET.WA        -INF            5.6200        +INF             .          
+2 .WA.ET        -INF           12.7041        +INF             .          
+2 .WA.WA        -INF             .            +INF             .          
+3 .ET.ET        -INF             .            +INF             .          
+3 .ET.WA        -INF            5.6786        +INF             .          
+3 .WA.ET        -INF           12.7276        +INF             .          
+3 .WA.WA        -INF             .            +INF             .          
+4 .ET.ET        -INF             .            +INF             .          
+4 .ET.WA        -INF            5.7209        +INF             .          
+4 .WA.ET        -INF           12.7445        +INF             .          
+4 .WA.WA        -INF             .            +INF             .          
+5 .ET.ET        -INF             .            +INF             .          
+5 .ET.WA        -INF            5.7643        +INF             .          
+5 .WA.ET        -INF           12.7618        +INF             .          
+5 .WA.WA        -INF             .            +INF             .          
+6 .ET.ET        -INF             .            +INF             .          
+6 .ET.WA        -INF            5.8109        +INF             .          
+6 .WA.ET        -INF           12.7805        +INF             .          
+6 .WA.WA        -INF             .            +INF             .          
+7 .ET.ET        -INF             .            +INF             .          
+7 .ET.WA        -INF            5.8414        +INF             .          
+7 .WA.ET        -INF           12.7927        +INF             .          
+7 .WA.WA        -INF             .            +INF             .          
+8 .ET.ET        -INF             .            +INF             .          
+8 .ET.WA        -INF            5.8833        +INF             .          
+8 .WA.ET        -INF           12.8094        +INF             .          
+8 .WA.WA        -INF             .            +INF             .          
+9 .ET.ET        -INF             .            +INF             .          
+9 .ET.WA        -INF            5.9225        +INF             .          
+9 .WA.ET        -INF           12.8251        +INF             .          
+9 .WA.WA        -INF             .            +INF             .          
+10.ET.ET        -INF             .            +INF             .          
+10.ET.WA        -INF            5.9368        +INF             .          
+10.WA.ET        -INF           12.8309        +INF             .          
+10.WA.WA        -INF             .            +INF             .          
+11.ET.ET        -INF             .            +INF             .          
+11.ET.WA        -INF            5.9530        +INF             .          
+11.WA.ET        -INF           12.8373        +INF             .          
+11.WA.WA        -INF             .            +INF             .          
+12.ET.ET        -INF             .            +INF             .          
+12.ET.WA        -INF            5.9743        +INF             .          
+12.WA.ET        -INF           12.8458        +INF             .          
+12.WA.WA        -INF             .            +INF             .          
+
+---- VAR a  Binary interaction Parameter a
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+ET.ET       -10.0000          .            10.0000          .          
+ET.WA       -10.0000        -1.1405        10.0000          .          
+WA.ET       -10.0000        10.0000        10.0000        -0.0003      
+WA.WA       -10.0000          .            10.0000          .          
+
+---- VAR b  Binary interaction Parameter b
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+ET.ET     -2500.0000          .          2500.0000          .          
+ET.WA     -2500.0000      2500.0000      2500.0000   -8.913459E-7      
+WA.ET     -2500.0000       999.9738      2500.0000          .          
+WA.WA     -2500.0000          .          2500.0000          .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR Obj               -INF            0.2449        +INF             .          
+
+  Obj  Objective of optimization
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+                             0     ERRORS
+GAMS 44.4.0  06604687 Sep 19, 2023          WEX-WEI x86 64bit/MS Windows - 10/03/23 04:59:11 Page 7
+Optimization of Binary Parameters NRTL
+E x e c u t i o n
+
+
+----    185 VARIABLE a.L  Binary interaction Parameter a
+
+            ET          WA
+
+ET                  -1.141
+WA      10.000
+
+
+----    185 VARIABLE b.L  Binary interaction Parameter b
+
+            ET          WA
+
+ET                2500.000
+WA     999.974
+
+
+----    185 VARIABLE alpha.L  Binary interaction alpha
+
+            ET          WA
+
+ET       0.426       0.426
+WA       0.426       0.426
+
+
+----    185 VARIABLE Obj.L                 =        0.245  Objective of optimization
+
+
+EXECUTION TIME       =        5.735 SECONDS      4 MB  44.4.0 06604687 WEX-WEI
+
+
+USER: GAMS Community License for Jose Paredes Ortiz  G230518|0002AO-GEN
+      University of Engineering and Technology - UTEC,           CL2753
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      D:\Documentos\GAMS\SOAIQ.gms
+Output     D:\Documentos\GAMS\SOAIQ.lst

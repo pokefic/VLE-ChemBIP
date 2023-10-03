@@ -1,0 +1,104 @@
+--- Job MODEL.gms Start 10/03/23 01:51:00 43.4.1 3da5975b LEX-LEG x86 64bit/Linux
+--- Applying:
+    /opt/gams/43.4.1/gmsprmun.txt
+    /opt/gams/43.4.1/gamsconfig.yaml
+--- GAMS Parameters defined
+    Restart /var/lib/condor/execute/dir_61093/gamsexec/restart.g00
+    Input /var/lib/condor/execute/dir_61093/gamsexec/MODEL.gms
+    Output /var/lib/condor/execute/dir_61093/gamsexec/solve.lst
+    PageWidth 79
+    PageSize 0
+    ScrDir /var/lib/condor/execute/dir_61093/neos-61097/
+    SysDir /opt/gams/43.4.1/
+    CurDir /var/lib/condor/execute/dir_61093/gamsexec/
+    LogOption 4
+    LogFile /var/lib/condor/execute/dir_61093/gamsexec/solve.log
+    AppendOut 1
+    AppendLog 0
+    Suppress 0
+    CErr 10
+    ErrMsg 1
+    ErrorLog 99
+    LimRow 0
+    LimCol 0
+    IDE 1
+    GDX /var/lib/condor/execute/dir_61093/gamsexec/out.gdx
+    ExecMode 3
+    gdxCompress 1
+    Solver cbc
+    LstTitleLeftAligned 1
+Licensee: NEOS Server License prod-exec-7.neos-server.orgS221207/0001AB-GEN
+          mac@2c:ea:7f:71:ac:18                                     DCE1890
+          /opt/gams/43.4.1/gamslice.txt
+          Evaluation license: Not for commercial or production use
+Processor information: 2 socket(s), 32 core(s), and 64 thread(s) available
+GAMS 43.4.1   Copyright (C) 1987-2023 GAMS Development. All rights reserved
+--- Starting continued compilation
+--- Workfile was generated under GAMS version WEX430-430
+--- MODEL.gms(4) 3 Mb[FIL:"/var/lib/condor/execute/dir_61093/gamsexec/MODEL.gms",4,0]
+--- Starting execution: elapsed 0:00:00.003[LST:5]
+--- MODEL.gms(174) 4 Mb[FIL:"/var/lib/condor/execute/dir_61093/gamsexec/MODEL.gms",174,0]
+--- Generating NLP model Opti[LST:5]
+--- MODEL.gms(176) 6 Mb[FIL:"/var/lib/condor/execute/dir_61093/gamsexec/MODEL.gms",176,0]
+---   201 rows  229 columns  901 non-zeroes
+---   3,075 nl-code  672 nl-non-zeroes
+--- Range statistics (absolute non-zero finite values)
+--- RHS       [min, max] : [ 1.000E+00, 7.365E+01] - Zero values observed as well
+--- Bound     [min, max] : [ 2.000E-01, 2.500E+03] - Zero values observed as well
+--- Matrix    [min, max] : [ 1.000E-16, 2.531E+09] - Zero values observed as well
+--- MODEL.gms(176) 4 Mb[FIL:"/var/lib/condor/execute/dir_61093/gamsexec/MODEL.gms",176,0]
+--- Executing BARON (Solvelink=2): elapsed 0:00:00.006[LST:18]
+
+GAMS/BARON       43.4.1 3da5975b Jun 22, 2023          LEG x86 64bit/Linux    
+
+===========================================================================
+ BARON version 23.3.11. Built: LNX-64 Sat Mar 11 17:57:34 EST 2023
+
+ BARON is a product of The Optimization Firm.
+ For information on BARON, see https://minlp.com/about-baron
+
+ If you use this software, please cite publications from
+ https://minlp.com/baron-publications, such as: 
+
+ Khajavirad, A. and N. V. Sahinidis,
+ A hybrid LP/NLP paradigm for global optimization relaxations,
+ Mathematical Programming Computation, 10, 383-421, 2018.
+===========================================================================
+ This BARON run may utilize the following subsolver(s)
+ For LP/MIP/QP: CLP/CBC, ILOG CPLEX                             
+ For NLP: MINOS, SNOPT, External NLP, IPOPT, FILTERSQP
+===========================================================================
+ Doing local search
+ Preprocessing found feasible solution with value 0.306034
+ Solving bounding LP
+ Starting multi-start local search
+ Preprocessing found feasible solution with value 0.860979E-02
+ Done with local search
+===========================================================================
+  Iteration    Open nodes         Time (s)    Lower bound      Upper bound
+          1+            1            38.31      0.00000         0.860979E-02
+          1             0            49.68     0.860893E-02     0.860979E-02
+
+                         *** Normal completion ***            
+
+ Wall clock time:                    49.80
+ Total CPU time used:                49.68
+
+ Total no. of BaR iterations:       1
+ Best solution found at node:      -1
+ Max. no. of nodes in memory:       1
+ 
+ All done
+===========================================================================
+
+Solution      = 0.00860979420562623  best solution found during preprocessing
+Best possible = 0.0086089333123
+Absolute gap  = 8.60893326232529E-7  optca = 1E-9
+Relative gap  = 9.99900004195178E-5  optcr = 0.0001
+
+--- Reading solution for model Opti[LST:30]
+--- Executing after solve: elapsed 0:00:49.827[LST:634]
+--- MODEL.gms(179) 4 Mb[FIL:"/var/lib/condor/execute/dir_61093/gamsexec/MODEL.gms",179,0]
+--- GDX File /var/lib/condor/execute/dir_61093/gamsexec/out.gdx[FIL:"/var/lib/condor/execute/dir_61093/gamsexec/out.gdx",0,0]
+*** Status: Normal completion[LST:679]
+--- Job MODEL.gms Stop 10/03/23 01:51:50 elapsed 0:00:49.828

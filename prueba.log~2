@@ -1,0 +1,30 @@
+
+--- Job prueba.gms Start 10/03/23 03:57:12 44.4.0 06604687 WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    C:\GAMS\44\gmsprmNT.txt
+    C:\Users\pokef\OneDrive\Documentos\GAMS\gamsconfig.yaml
+--- GAMS Parameters defined
+    Input D:\Documentos\GAMS\prueba.gms
+    PageSize 0
+    ScrDir D:\Documentos\GAMS\225a\
+    SysDir C:\GAMS\44\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+Licensee: GAMS Community License for Jose Paredes Ortiz  G230518|0002AO-GEN
+          University of Engineering and Technology - UTEC,           CL2753
+          C:\Users\pokef\OneDrive\Documentos\GAMS\gamslice.txt
+          Jose Paredes Ortiz, jose.paredes@utec.edu.pe                     
+          Community license for demonstration and instructional purposes only
+Processor information: 1 socket(s), 6 core(s), and 12 thread(s) available
+GAMS 44.4.0   Copyright (C) 1987-2023 GAMS Development. All rights reserved
+--- Starting compilation
+--- prueba.gms(9) 3 Mb 1 Error
+*** Error 409 in D:\Documentos\GAMS\prueba.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- prueba.gms(9) 3 Mb 1 Error
+*** Status: Compilation error(s)
+--- Job prueba.gms Stop 10/03/23 03:57:12 elapsed 0:00:00.010
